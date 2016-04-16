@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using BaconTime.Terminal.Commands;
 using Countersoft.Gemini.Api;
-using Countersoft.Gemini.Commons.Dto;
 using Countersoft.Gemini.Commons.Entity;
 using Fclp;
-using Fclp.Internals.Extensions;
-using Newtonsoft.Json;
 using SimpleInjector;
 
 namespace BaconTime.Terminal
@@ -15,14 +12,14 @@ namespace BaconTime.Terminal
     class Program
     {
         private static Container container;
-        private static ServiceManager svc;
         private static Configuration config;
-        private static User user;
         private static IssueTimeTracking log;
 
         private static readonly Dictionary<string, Type> Commands = new Dictionary<string, Type>
         {
             {"log",typeof(LogHoursCommand)},
+            {"show",typeof(TimeLoggedForItemCommand)},
+            {"show2",typeof(TimeLoggedByUserGroupedByItemCommand)},
         };
 
         static void Main(string[] args)
@@ -30,7 +27,7 @@ namespace BaconTime.Terminal
             try
             {
                 var svc = LoadService(args);
-                var user = LoadUser();
+                var user = LoadUser(svc);
 
                 container = new Container();
                 container.Register(() => svc);
@@ -44,6 +41,7 @@ namespace BaconTime.Terminal
             }
             catch (Exception e)
             {
+                Console.WriteLine("\nError occured.");
                 Console.WriteLine(e.Message);
             }
         }
@@ -62,7 +60,7 @@ namespace BaconTime.Terminal
             return new ServiceManager(config.endpoint, config.username, "", config.key);
         }
 
-        private static User LoadUser()
+        private static User LoadUser(ServiceManager svc)
         {
             try
             {
@@ -70,7 +68,7 @@ namespace BaconTime.Terminal
             }
             catch (Exception e)
             {
-                throw new Exception($"Could not find user with username: {config.username}", e);
+                throw new Exception($"Could not find user with username: {config.username}, " + e.Message, e);
             }
         }
     }
