@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaconTime.Terminal", "BaconTime.Terminal\BaconTime.Terminal.csproj", "{321FC229-CC5B-474C-AC88-0B478BC4D0DC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaconTime.Spec", "BaconTime.Spec\BaconTime.Spec.csproj", "{FBC32D03-1B8B-4469-BCBE-E9ABC68AB3DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{321FC229-CC5B-474C-AC88-0B478BC4D0DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{321FC229-CC5B-474C-AC88-0B478BC4D0DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{321FC229-CC5B-474C-AC88-0B478BC4D0DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBC32D03-1B8B-4469-BCBE-E9ABC68AB3DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBC32D03-1B8B-4469-BCBE-E9ABC68AB3DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBC32D03-1B8B-4469-BCBE-E9ABC68AB3DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBC32D03-1B8B-4469-BCBE-E9ABC68AB3DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

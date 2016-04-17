@@ -8,13 +8,11 @@ namespace BaconTime.Terminal.Commands
     public class LogHoursCommand : BaseCommand
     {
         private readonly ServiceManager svc;
-        private readonly User user;
         private FluentCommandLineParser<IssueTimeTracking> p;
 
-        public LogHoursCommand(ServiceManager svc, User user)
+        public LogHoursCommand(ServiceManager svc)
         {
             this.svc = svc;
-            this.user = user;
             p = new FluentCommandLineParser<IssueTimeTracking>();
 
             p.Setup(x => x.IssueId).As('t', "ticket").Required().WithDescription("the id of te issue number.");
@@ -34,9 +32,10 @@ namespace BaconTime.Terminal.Commands
 
             if (log.Minutes + log.Hours == 0) throw new Exception("-h and -m for hours and minutes are missing.");
 
+            var user = svc.Item.WhoAmI();
             var issue = svc.Item.Get(log.IssueId);
 
-            log.UserId = user.Id;
+            log.UserId = user.Entity.Id;
             log.EntryDate = now;
             log.Active = true;
             log.Archived = false;
