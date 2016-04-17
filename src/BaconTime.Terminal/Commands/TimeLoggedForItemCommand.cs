@@ -1,8 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using BaconTime.Terminal.Extensions;
+using ConsoleTables.Core;
 using Countersoft.Gemini.Api;
-using Countersoft.Gemini.Commons.Entity;
 using Fclp;
+using Fclp.Internals.Extensions;
+using Format = ConsoleTables.Core.Format;
 
 namespace BaconTime.Terminal.Commands
 {
@@ -18,8 +24,10 @@ namespace BaconTime.Terminal.Commands
             this.svc = svc;
             p = new FluentCommandLineParser();
 
-            p.Setup<int>('t', "ticket").Required().Callback(x => issueId = x);
-            p.Setup<int>('l', "limit").SetDefault(10).Callback(x => limit = x);
+            p.Setup<int>('t', "ticket").Required().Callback(x => issueId = x).WithDescription("Id of the ticket, for which the log entries shouldbe loaded.");
+            p.Setup<int>('l', "limit").SetDefault(10).Callback(x => limit = x).WithDescription("Limit number of entries to be returned");
+
+            p.SetupHelp("?", "help").Callback(x => Console.WriteLine(x));
         }
 
         public override void Execute(string[] args)
@@ -29,49 +37,16 @@ namespace BaconTime.Terminal.Commands
             var issue = svc.Item.Get(issueId);
             var times = svc.Item.GetTimes(issueId);
 
-            Console.WriteLine($"Ticket: {issue.Title} \nRecent entries: \n");
-            var items = times.OrderByDescending(x => x.Entity.EntryDate)
-                            .Take(limit)
-                            .Select(x => $"{x.Entity.Created}: {x.Fullname}: {x.Entity.Hours}h {x.Entity.Minutes}m message: {string.Join("", x.Entity.Comment.Take(25))}...");
-            var report = string.Join("\n", items);
+            Console.WriteLine($"\n\n-> {issue.Title}:\n");
 
-            Console.WriteLine(report);
-        }
-    }
+            var table = new ConsoleTable("date", "hors", "message");
 
-    public class TimeLoggedByUserGroupedByItemCommand : BaseCommand
-    {
-        private readonly ServiceManager svc;
-        private FluentCommandLineParser p;
-        private int issueId;
-        private int limit;
-
-        public TimeLoggedByUserGroupedByItemCommand(ServiceManager svc)
-        {
-            this.svc = svc;
-            p = new FluentCommandLineParser();
-
-            p.Setup<int>('l', "limit").SetDefault(10).Callback(x => limit = x);
-        }
-
-        public override void Execute(string[] args)
-        {
-            ValidateParams(p.Parse(args));
-            
-            var user = svc.Item.WhoAmI();
-            var times = svc.Item.GetFilteredItems(new IssuesFilter
-            {
-                IncludeClosed = true,
-                TimeLoggedBy = user.Entity.Id + ""
-            }).SelectMany(x => x.TimeEntries);
-
-            //Console.WriteLine($"Ticket: {issue.Title} \nRecent entries: \n");
-            var items = times.OrderByDescending(x => x.Entity.EntryDate)
-                            .Take(limit)
-                            .Select(x => $"{x.Entity.Created}: {x.Fullname}: {x.Entity.Hours}h {x.Entity.Minutes}m message: {string.Join("", x.Entity.Comment.Take(25))}...");
-            var report = string.Join("\n", items);
-
-            Console.WriteLine(report);
+            times
+                .OrderByDescending(x => x.Entity.EntryDate)
+                .Take(limit)
+                .Select(x => new { date = x.Entity.EntryDate.ToString("yyyy-MM-dd"), Hours = Math.Round(x.Minutes() / 60m, 1), Message = string.Join("", x.Entity.Comment.Take(25)) })
+                .ForEach(x => table.AddRow(x.date, x.Hours, x.Message));
+            table.Write(Format.MarkDown);
         }
     }
 }

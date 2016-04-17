@@ -18,6 +18,7 @@ namespace BaconTime.Terminal.Commands
             p.Setup(x => x.IssueId).As('t', "ticket").Required().WithDescription("the id of te issue number.");
             p.Setup(x => x.Comment).As('c', "comment").Required();
 
+            p.Setup(x => x.EntryDate).As('d', "date").SetDefault(DateTime.Today);
             p.Setup(x => x.Hours).As('h', "hours").SetDefault(0);
             p.Setup(x => x.Minutes).As('m', "minutes").SetDefault(0);
             p.Setup(x => x.TimeTypeId).As("time-type").SetDefault(30);
@@ -36,7 +37,6 @@ namespace BaconTime.Terminal.Commands
             var issue = svc.Item.Get(log.IssueId);
 
             log.UserId = user.Entity.Id;
-            log.EntryDate = now;
             log.Active = true;
             log.Archived = false;
             log.Deleted = false;

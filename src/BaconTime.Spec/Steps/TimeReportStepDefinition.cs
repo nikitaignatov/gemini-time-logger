@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using BaconTime.Terminal;
 using BaconTime.Terminal.Commands;
+using Countersoft.Foundation.Commons.Extensions;
 using Countersoft.Gemini.Api;
 using Countersoft.Gemini.Commons.Dto;
 using Countersoft.Gemini.Commons.Entity;
@@ -62,16 +63,19 @@ namespace BaconTime.Spec.Steps
             report.Trim().ShouldBeEquivalentTo("Time was logged.");
         }
 
-        [Then(@"(.*) is and the (.*) is added.")]
-        public void ThenIsAndTheCommentIsAdded_(int total_minutes, string comment)
+        [Then(@"(.*), (.*) and the (.*) is added.")]
+        public void ThenIsAndTheCommentIsAdded_(int total_minutes, string date, string comment)
         {
             var svc = ScenarioContext.Current.Get<ServiceManager>();
             var ticket = ScenarioContext.Current.Get<IssueDto>();
+
+            var entryDate = (date == "today" ? DateTime.Today : Convert.ToDateTime(date)).ToUniversalTime().Date;
 
             svc.Item.GetTimes(ticket.Id).Any().Should().BeTrue();
             var entry = svc.Item.GetTimes(ticket.Id).First().Entity;
             (entry.Minutes + (entry.Hours * 60)).ShouldBeEquivalentTo(total_minutes);
             entry.Comment.ShouldBeEquivalentTo(comment);
+            entry.EntryDate.ToUniversalTime().Date.ShouldBeEquivalentTo(entryDate);
         }
 
         [When(@"I execute show (.*)")]
@@ -85,7 +89,7 @@ namespace BaconTime.Spec.Steps
             ScenarioContext.Current.Set(report, "report");
         }
 
-        [Then(@"message isshow with (.*)")]
+        [Then(@"message is shown")]
         public void ThenMessageIsShown(string expected)
         {
             var report = ScenarioContext.Current.Get<string>("report");
