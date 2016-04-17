@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using BaconTime.Terminal.Commands;
 using Countersoft.Gemini.Api;
@@ -35,9 +36,7 @@ namespace BaconTime.Terminal
                 container.Register(() => user);
                 container.Verify();
 
-                var cmd = args.FirstOrDefault();
-                args = args.Skip(1).ToArray();
-                ((ICommand)container.GetInstance(Commands[cmd])).Execute(args);
+                ((ICommand)container.GetInstance(Commands[config.command])).Execute(args);
             }
             catch (Exception e)
             {
@@ -49,9 +48,11 @@ namespace BaconTime.Terminal
         private static ServiceManager LoadService(string[] args)
         {
             var c = new FluentCommandLineParser<Configuration>();
-            c.Setup(x => x.endpoint).As('e', "endpoint").Required();
-            c.Setup(x => x.username).As('u', "username").Required();
-            c.Setup(x => x.key).As('k', "apikey").Required();
+            var settings = ConfigurationManager.AppSettings;
+            c.Setup(x => x.endpoint).As('e', "endpoint").SetDefault(settings["endpoint"]);
+            c.Setup(x => x.username).As('u', "username").SetDefault(settings["username"]);
+            c.Setup(x => x.key).As('k', "apikey").SetDefault(settings["apikey"]);
+            c.Setup(x => x.command).As("command").Required();
 
             var result = c.Parse(args);
             if (result.HasErrors) throw new Exception(result.ErrorText);

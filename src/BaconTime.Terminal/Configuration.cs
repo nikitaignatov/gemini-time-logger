@@ -5,5 +5,6 @@ namespace BaconTime.Terminal
         public string username { get; set; }
         public string key { get; set; }
         public string endpoint { get; set; }
+        public string command { get; set; }
     }
 }
