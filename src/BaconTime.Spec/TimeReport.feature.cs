@@ -65,12 +65,12 @@ namespace BaconTime.Spec
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("log time for ticket")]
-        [NUnit.Framework.TestCaseAttribute("log -t id -h 1 -m 10 -c \"Hi mom\"", "Hi mom", "70", new string[0])]
-        [NUnit.Framework.TestCaseAttribute("log -t id -m 10 -c \"work\"", "work", "10", new string[0])]
-        [NUnit.Framework.TestCaseAttribute("log -t id -h 1 -c \"work\"", "work", "60", new string[0])]
-        [NUnit.Framework.TestCaseAttribute("log -t id -c work -h 1", "work", "60", new string[0])]
-        [NUnit.Framework.TestCaseAttribute("log -t id -h 10 -c \"work very hard\"", "work very hard", "600", new string[0])]
-        [NUnit.Framework.TestCaseAttribute("log -t id -m 1 -c  hi", "hi", "1", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("--cmd log -t id -h 1 -m 10 -c \"Hi mom\"", "Hi mom", "70", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("--cmd log -t id -m 10 -c \"work\"", "work", "10", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("--cmd log -t id -h 1 -c \"work\"", "work", "60", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("--cmd log -t id -c work -h 1", "work", "60", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("--cmd log -t id -h 10 -c \"work very hard\"", "work very hard", "600", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("--cmd log -t id -m 1 -c  hi", "hi", "1", new string[0])]
         public virtual void LogTimeForTicket(string command, string comment, string totalMinutes, string[] exampleTags)
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("log time for ticket", exampleTags);
@@ -88,7 +88,7 @@ this.ScenarioSetup(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("show time for ticket")]
-        [NUnit.Framework.TestCaseAttribute("log -t id", "1h 10m", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("--cmd show -t id", "1h 10m", new string[0])]
         public virtual void ShowTimeForTicket(string command, string report, string[] exampleTags)
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("show time for ticket", exampleTags);
@@ -97,7 +97,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 17
  testRunner.Given("I have a ticket", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 18
- testRunner.And("I execute log log -t id -h 1 -m 10 -c \"Hi mom\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I execute log --cmd log -t id -h 1 -m 10 -c \"Hi mom\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 19
  testRunner.When(string.Format("I execute show {0}", command), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 20

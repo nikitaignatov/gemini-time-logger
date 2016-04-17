@@ -3,16 +3,16 @@
 
 Create a logger.bat file 
 
-```cmd
+```bat
 set cli= "C:\tools\timelogger\BaconTime.terminal.exe"
-%cli% --endpoint <HTTP://DEMOIU.ONGEMINI.COM> --username <USERNAME> --apikey <APIKEY> --command %*  
+%cli% --endpoint <HTTP://DEMOIU.ONGEMINI.COM> --username <USERNAME> --apikey <APIKEY> --cmd %*  
 ```
 Replace the params with your credentials and the url to Gemini.
 
 You can also omit the ```--endpoint``` ```--username and``` ```--apikey```
 
-```cmd
-"C:\tools\timelogger\BaconTime.terminal.exe"  --command %*  
+```bat
+"C:\tools\timelogger\BaconTime.terminal.exe"  --cmd %*  
 ```
 
 and define the values in app.config instead.

@@ -3,6 +3,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using BaconTime.Terminal;
 using BaconTime.Terminal.Commands;
 using Countersoft.Gemini.Api;
 using Countersoft.Gemini.Commons.Dto;
@@ -19,7 +20,7 @@ namespace BaconTime.Spec.Steps
         public static void Before()
         {
             var s = ConfigurationManager.AppSettings;
-            var svc = new ServiceManager(s["endpoint"], s["username"], "", s["key"]);
+            var svc = new ServiceManager(s["endpoint"], s["username"], "", s["apikey"]);
             var project = svc.Projects.GetProjects().First();
             var user = svc.Item.WhoAmI();
 
@@ -57,7 +58,7 @@ namespace BaconTime.Spec.Steps
             var ticket = ScenarioContext.Current.Get<IssueDto>();
             command = command.Replace("id", ticket.Id.ToString());
 
-            var report = StringExt.ConsoleSpy(() => new LogHoursCommand(svc).Execute(command.ToArgs()));
+            var report = StringExt.ConsoleSpy(() => new CommandRunner().Run(command.ToArgs()));
             report.Trim().ShouldBeEquivalentTo("Time was logged.");
         }
 
@@ -80,7 +81,7 @@ namespace BaconTime.Spec.Steps
             var ticket = ScenarioContext.Current.Get<IssueDto>();
             command = command.Replace("id", ticket.Id.ToString());
 
-            var report = StringExt.ConsoleSpy(() => new TimeLoggedForItemCommand(svc).Execute(command.ToArgs()));
+            var report = StringExt.ConsoleSpy(() => new CommandRunner().Run(command.ToArgs()));
             ScenarioContext.Current.Set(report, "report");
         }
 

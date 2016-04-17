@@ -69,9 +69,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command.cs" />
+    <Compile Include="BaseCommand.cs" />
+    <Compile Include="CommandRunner.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Commands\LogHoursCommand.cs" />
+    <Compile Include="ICommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Commands\TimeLoggedForItemCommand.cs" />
