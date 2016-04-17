@@ -41,4 +41,9 @@ view time logged for a ticket:
 
 ```bat
 logger show -t 1024
+
+// output:
+| date       | hours   | message |
+|------------|---------|---------|
+| 2016-04-17 | 1.2     | hi      |
 ```
