@@ -71,7 +71,7 @@ namespace BaconTime.Spec
         [NUnit.Framework.TestCaseAttribute("log -t id -c work -h 1", "work", "60", new string[0])]
         [NUnit.Framework.TestCaseAttribute("log -t id -h 10 -c \"work very hard\"", "work very hard", "600", new string[0])]
         [NUnit.Framework.TestCaseAttribute("log -t id -m 1 -c  hi", "hi", "1", new string[0])]
-        public virtual void LogTimeForTicket(string entry, string comment, string totalMinutes, string[] exampleTags)
+        public virtual void LogTimeForTicket(string command, string comment, string totalMinutes, string[] exampleTags)
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("log time for ticket", exampleTags);
 #line 3
@@ -79,9 +79,29 @@ this.ScenarioSetup(scenarioInfo);
 #line 4
  testRunner.Given("I have a ticket", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 5
- testRunner.When(string.Format("I log {0}", entry), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When(string.Format("I execute log {0}", command), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 6
  testRunner.Then(string.Format("{0} is and the {1} is added.", totalMinutes, comment), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("show time for ticket")]
+        [NUnit.Framework.TestCaseAttribute("log -t id", "1h 10m", new string[0])]
+        public virtual void ShowTimeForTicket(string command, string report, string[] exampleTags)
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("show time for ticket", exampleTags);
+#line 16
+this.ScenarioSetup(scenarioInfo);
+#line 17
+ testRunner.Given("I have a ticket", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 18
+ testRunner.And("I execute log log -t id -h 1 -m 10 -c \"Hi mom\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 19
+ testRunner.When(string.Format("I execute show {0}", command), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 20
+ testRunner.Then(string.Format("message isshow with {0}", report), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

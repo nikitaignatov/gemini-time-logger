@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using BaconTime.Terminal.Commands;
 using Countersoft.Gemini.Api;
 using Countersoft.Gemini.Commons.Dto;
 using Countersoft.Gemini.Commons.Entity;
 using FluentAssertions;
-using NSubstitute;
 using TechTalk.SpecFlow;
 
 namespace BaconTime.Spec.Steps
@@ -36,6 +34,7 @@ namespace BaconTime.Spec.Steps
             ScenarioContext.Current.Set(ticket);
             ScenarioContext.Current.Set(svc);
         }
+
         [AfterScenario()]
         public static void After()
         {
@@ -50,14 +49,16 @@ namespace BaconTime.Spec.Steps
             ScenarioContext.Current.Get<IssueDto>().Should().NotBeNull();
         }
 
-        [When(@"^I log (.*)$")]
-        public void WhenILogAndHiMom(string entry)
+        [Given(@"^I execute log (.*)$")]
+        [When(@"^I execute log (.*)$")]
+        public void WhenIExecuteLogCommand(string command)
         {
             var svc = ScenarioContext.Current.Get<ServiceManager>();
             var ticket = ScenarioContext.Current.Get<IssueDto>();
-            entry = entry.Replace("id", ticket.Id.ToString());
+            command = command.Replace("id", ticket.Id.ToString());
 
-            new LogHoursCommand(svc).Execute(entry.ToArgs());
+            var report = StringExt.ConsoleSpy(() => new LogHoursCommand(svc).Execute(command.ToArgs()));
+            report.Trim().ShouldBeEquivalentTo("Time was logged.");
         }
 
         [Then(@"(.*) is and the (.*) is added.")]
@@ -69,8 +70,25 @@ namespace BaconTime.Spec.Steps
             svc.Item.GetTimes(ticket.Id).Any().Should().BeTrue();
             var entry = svc.Item.GetTimes(ticket.Id).First().Entity;
             (entry.Minutes + (entry.Hours * 60)).ShouldBeEquivalentTo(total_minutes);
-            Console.WriteLine(entry.Comment);
             entry.Comment.ShouldBeEquivalentTo(comment);
+        }
+
+        [When(@"I execute show (.*)")]
+        public void WhenIExecuteShowLog_TId(string command)
+        {
+            var svc = ScenarioContext.Current.Get<ServiceManager>();
+            var ticket = ScenarioContext.Current.Get<IssueDto>();
+            command = command.Replace("id", ticket.Id.ToString());
+
+            var report = StringExt.ConsoleSpy(() => new TimeLoggedForItemCommand(svc).Execute(command.ToArgs()));
+            ScenarioContext.Current.Set(report, "report");
+        }
+
+        [Then(@"message isshow with (.*)")]
+        public void ThenMessageIsShown(string expected)
+        {
+            var report = ScenarioContext.Current.Get<string>("report");
+            report.Should().Contain(expected);
         }
     }
 
@@ -83,6 +101,26 @@ namespace BaconTime.Spec.Steps
                   .Cast<Match>()
                   .Select(m => m.Groups["match"].Value)
                   .ToArray();
+        }
+
+        public static string ConsoleSpy(Action executeCommand)
+        {
+            var originalConsoleOut = Console.Out;
+            try
+            {
+                using (var writer = new StringWriter())
+                {
+                    Console.SetOut(writer);
+                    executeCommand();
+                    writer.Flush();
+
+                    return writer.GetStringBuilder().ToString();
+                }
+            }
+            finally
+            {
+                Console.SetOut(originalConsoleOut);
+            }
         }
     }
 }

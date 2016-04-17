@@ -19,7 +19,7 @@ namespace BaconTime.Terminal
         {
             {"log",typeof(LogHoursCommand)},
             {"show",typeof(TimeLoggedForItemCommand)},
-            {"show2",typeof(TimeLoggedByUserGroupedByItemCommand)},
+            {"show-all",typeof(TimeLoggedByUserGroupedByItemCommand)},
         };
 
         static void Main(string[] args)
