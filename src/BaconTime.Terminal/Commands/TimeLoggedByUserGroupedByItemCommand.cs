@@ -1,8 +1,12 @@
 using System;
 using System.Linq;
+using BaconTime.Terminal.Extensions;
+using ConsoleTables.Core;
 using Countersoft.Gemini.Api;
 using Countersoft.Gemini.Commons.Entity;
 using Fclp;
+using Fclp.Internals.Extensions;
+using Format = ConsoleTables.Core.Format;
 
 namespace BaconTime.Terminal.Commands
 {
@@ -10,8 +14,9 @@ namespace BaconTime.Terminal.Commands
     {
         private readonly ServiceManager svc;
         private FluentCommandLineParser p;
-        private int issueId;
         private int limit;
+        private bool showMyEntriesOnly;
+        private bool includeClosedTickets;
 
         public TimeLoggedByUserGroupedByItemCommand(ServiceManager svc)
         {
@@ -19,8 +24,9 @@ namespace BaconTime.Terminal.Commands
             p = new FluentCommandLineParser();
 
             p.Setup<int>('l', "limit").SetDefault(10).Callback(x => limit = x).WithDescription("Limit the number of enties to be shown.");
+            p.Setup<bool>("include-closed").SetDefault(false).Callback(x => includeClosedTickets = x).WithDescription("Include clode tickets");
+            p.Setup<bool>("my").SetDefault(false).Callback(x => showMyEntriesOnly = x).WithDescription("Show only my entries.");
             p.SetupHelp("?", "help").Callback(x => Console.WriteLine(x));
-            p.HelpOption.ShowHelp(p.Options);
         }
 
         public override void Execute(string[] args)
@@ -28,19 +34,30 @@ namespace BaconTime.Terminal.Commands
             ValidateParams(p.Parse(args));
 
             var user = svc.Item.WhoAmI();
-            var times = svc.Item.GetFilteredItems(new IssuesFilter
+            var items = svc.Item.GetFilteredItems(new IssuesFilter
             {
-                IncludeClosed = true,
+                IncludeClosed = includeClosedTickets,
                 TimeLoggedBy = user.Entity.Id + ""
-            }).SelectMany(x => x.TimeEntries);
+            }).SelectMany(x => x.TimeEntries.Select(e => new { x.Entity, Time = e })).ToList();
 
-            //Console.WriteLine($"Ticket: {issue.Title} \nRecent entries: \n");
-            var items = times.OrderByDescending(x => x.Entity.EntryDate)
-                .Take(limit)
-                .Select(x => $"{x.Entity.Created}: {x.Fullname}: {x.Entity.Hours}h {x.Entity.Minutes}m message: {string.Join("", x.Entity.Comment.Take(25))}...");
-            var report = string.Join("\n", items);
+            var times = items.OrderByDescending(x => x.Time.Entity.EntryDate);
 
-            Console.WriteLine(report);
+            var table = new ConsoleTable("user", "ticket", "date", "hours", "message");
+
+            times
+                .Where(x => !showMyEntriesOnly || x.Time.Entity.UserId == user.Entity.Id)
+                .Select(x => new object[]
+                {
+                    x.Time.Fullname.Shorten(10),
+                    x.Entity.Title.Shorten(20),
+                    x.Time.Entity.EntryDate,
+                    x.Time.Hours(),
+                    x.Time.Entity.Comment.Shorten(25)
+                })
+                .Take(limit).
+                ForEach(x => table.AddRow(x));
+
+            table.Write(Format.MarkDown);
         }
     }
 }

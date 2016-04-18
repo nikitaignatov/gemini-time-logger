@@ -1,13 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using BaconTime.Terminal.Extensions;
 using ConsoleTables.Core;
 using Countersoft.Gemini.Api;
-using Countersoft.Gemini.Commons.Dto;
-using Countersoft.Gemini.Commons.Entity;
 using Fclp;
 using Fclp.Internals.Extensions;
 using Format = ConsoleTables.Core.Format;
@@ -29,7 +24,7 @@ namespace BaconTime.Terminal.Commands
 
             p.Setup<int>('t', "ticket").Required().Callback(x => issueId = x).WithDescription("Id of the ticket, for which the log entries shouldbe loaded.");
             p.Setup<int>('l', "limit").SetDefault(10).Callback(x => limit = x).WithDescription("Limit number of entries to be returned");
-            p.Setup<bool>("me").SetDefault(false).Callback(x => showMyEntriesOnly = x).WithDescription("Show only my entries.");
+            p.Setup<bool>("my").SetDefault(false).Callback(x => showMyEntriesOnly = x).WithDescription("Show only my entries.");
 
             p.SetupHelp("?", "help").Callback(x => Console.WriteLine(x));
         }

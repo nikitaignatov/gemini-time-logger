@@ -19,5 +19,7 @@ namespace BaconTime.Terminal.Extensions
         public static int Minutes(this IssueTimeTrackingDto time) => time.Entity.Minutes();
         public static int Minutes(this IEnumerable<IssueTimeTrackingDto> times) => times.Select(Minutes).Sum();
         public static int Minutes(this IEnumerable<IssueTimeTracking> times) => times.Select(Minutes).Sum();
+
+        public static string Shorten(this string input, int length) => string.Join("", input.Take(length));
     }
 }
