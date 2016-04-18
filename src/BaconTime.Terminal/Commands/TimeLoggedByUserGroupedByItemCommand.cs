@@ -42,13 +42,14 @@ namespace BaconTime.Terminal.Commands
 
             var times = items.OrderByDescending(x => x.Time.Entity.EntryDate);
 
-            var table = new ConsoleTable("user", "ticket", "date", "hours", "message");
+            var table = new ConsoleTable("user", "id", "ticket", "date", "hours", "message");
 
             times
                 .Where(x => !showMyEntriesOnly || x.Time.Entity.UserId == user.Entity.Id)
                 .Select(x => new object[]
                 {
                     x.Time.Fullname.Shorten(10),
+                    x.Entity.Id,
                     x.Entity.Title.Shorten(20),
                     x.Time.Entity.EntryDate,
                     x.Time.Hours(),
