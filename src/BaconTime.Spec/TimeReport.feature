@@ -20,13 +20,10 @@ Scenario: show time for ticket
 	When I execute show --cmd show -t id
 	Then message is shown
 	"""
-+------------+---------+--------------+
-| date       | hors    | message      |
-+------------+---------+--------------+
-| 2016-01-31 | 1.2     | Hi mom       |
-+------------+---------+--------------+
-| 2015-01-31 | 8.5     | Working Hard |
-+------------+---------+--------------+
+| user         | date       | hours   | message      |
+|--------------|------------|---------|--------------|
+| Peter Jensen | 2016-01-31 | 1.2     | Hi mom       |
+| Peter Jensen | 2015-01-31 | 8.5     | Working Hard |
 	"""
 
 Scenario: show all time
@@ -38,13 +35,9 @@ Scenario: show all time
 	When I execute show --cmd show-all
 	Then message is shown
 	"""
-+------------+------------+---------+--------------+
-| ticket     | date       | hors    | message      |
-+------------+------------+---------+--------------+
-| id         | 2016-01-31 | 1.2     | Hi mom       |
-+------------+------------+---------+--------------+
-| id         | 2015-01-31 | 8.5     | Working Hard |
-+------------+------------+---------+--------------+
-| another-id | 2015-01-30 | 8.5     | Working Hard |
-+------------+------------+---------+--------------+
+| user         | id         | date       | hours   | message      |
+|--------------|------------|------------|---------|--------------|
+| Peter Jensen | id         | 2016-01-31 | 1.2     | Hi mom       |
+| Peter Jensen | id         | 2015-01-31 | 8.5     | Working Hard |
+| Peter Jensen | another-id | 2015-01-30 | 8.5     | Working Hard |
 	"""
