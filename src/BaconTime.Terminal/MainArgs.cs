@@ -33,11 +33,11 @@ namespace BaconTime.Terminal
         public bool CmdShowLoggedHours => args["show"].IsTrue && args["logged"].IsTrue && args["hours"].IsTrue;
 
         public int OptTicket => Convert.ToInt32(args["<ticket>"].ToString());
-        public int OptTimeType => Extract("--log-type", 30);
         public DateTime OptWhen => Extract("--when", DateTime.Now);
+        public int OptLogType => Extract("--log-type", 30);
         public int OptWorkingHOurs => Extract("--working-hours", 8);
 
-        private T Extract<T>(string key, T defaultValue) => args.ContainsKey(key) ? (T)Convert.ChangeType(args[key].Value, typeof(T)) : defaultValue;
+        private T Extract<T>(string key, T defaultValue) => args[key]?.Value != null ? (T)Convert.ChangeType(args[key]?.Value?.ToString(), typeof(T)) : defaultValue;
 
         public int OptHours => ConvertTo(args["<time>"].ToString(), "h");
         public int OptMinutes => ConvertTo(args["<time>"].ToString(), "h");

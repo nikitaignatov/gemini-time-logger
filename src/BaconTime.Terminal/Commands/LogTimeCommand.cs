@@ -14,7 +14,7 @@ namespace BaconTime.Terminal.Commands
             return new IssueTimeTracking
             {
                 IssueId = args.OptTicket,
-                TimeTypeId = args.OptTimeType,
+                TimeTypeId = args.OptLogType,
                 Hours = args.OptHours,
                 Minutes = args.OptMinutes,
                 Comment = args.OptMessage,

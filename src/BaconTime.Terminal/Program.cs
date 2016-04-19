@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Configuration;
+using System.Linq;
 using BaconTime.Terminal.Commands;
 using Countersoft.Gemini.Api;
+using Format = ConsoleTables.Core.Format;
 
 namespace BaconTime.Terminal
 {
@@ -12,10 +14,6 @@ namespace BaconTime.Terminal
             var args = new MainArgs(argv, help: true, exit: true);
             try
             {
-                foreach (var argument in args.Args)
-                {
-                    Console.WriteLine("{0} = {1}", argument.Key, argument.Value);
-                }
                 var svc = LoadService();
                 if (args.CmdLog) new LogTimeCommand(svc).Execute(args);
                 if (args.CmdShowLoggedHours) new ShowLoggedHoursCommand(svc).Execute(args);
@@ -24,6 +22,8 @@ namespace BaconTime.Terminal
             {
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
+                Console.WriteLine("\nInput args:\n");
+                ConsoleTables.Core.ConsoleTable.From(args.Args.ToList()).Write(Format.MarkDown);
             }
         }
 
