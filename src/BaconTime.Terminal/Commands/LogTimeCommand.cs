@@ -1,21 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 using Countersoft.Gemini.Api;
 using Countersoft.Gemini.Commons.Entity;
-using DocoptNet;
-using Fclp;
 
 namespace BaconTime.Terminal.Commands
 {
-    public class LogHoursCommand
+    public class LogTimeCommand
     {
         private readonly ServiceManager svc;
-        public LogHoursCommand(ServiceManager svc)
-        {
-            this.svc = svc;
-        }
+        public LogTimeCommand(ServiceManager svc) { this.svc = svc; }
 
         public IssueTimeTracking ToIssueTimeTracking(MainArgs args)
         {
@@ -26,6 +18,7 @@ namespace BaconTime.Terminal.Commands
                 Hours = args.OptHours,
                 Minutes = args.OptMinutes,
                 Comment = args.OptMessage,
+                EntryDate = args.OptWhen
             };
         }
 

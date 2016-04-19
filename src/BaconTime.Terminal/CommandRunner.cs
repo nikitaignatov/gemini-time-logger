@@ -19,10 +19,10 @@ namespace BaconTime.Terminal
 
         private static readonly Dictionary<string, Type> Commands = new Dictionary<string, Type>
         {
-            {"log",typeof(LogHoursCommand)},
+            {"log",typeof(LogTimeCommand)},
             {"show",typeof(TimeLoggedForItemCommand)},
             {"show-all",typeof(TimeLoggedByUserGroupedByItemCommand)},
-            {"show-days",typeof(DayReportCommand)},
+            {"show-days",typeof(ShowLoggedHoursCommand)},
             {"show-words",typeof(FrequentWordsCommand)},
         };
 

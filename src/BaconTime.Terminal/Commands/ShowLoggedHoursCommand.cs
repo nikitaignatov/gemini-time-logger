@@ -11,28 +11,27 @@ using Format = ConsoleTables.Core.Format;
 
 namespace BaconTime.Terminal.Commands
 {
-    public class DayReportCommand : BaseCommand
+    public class ShowLoggedHoursCommand
     {
         private readonly ServiceManager svc;
-        private FluentCommandLineParser p;
-        private int limit;
+        private int limit = 100;
+        private DateTime from;
+        private DateTime to;
         private int workingHours;
 
-        public DayReportCommand(ServiceManager svc)
+        public ShowLoggedHoursCommand(ServiceManager svc)
         {
             this.svc = svc;
-            p = new FluentCommandLineParser();
-
-            p.Setup<int>('l', "limit").SetDefault(30).Callback(x => limit = x).WithDescription("Limit the number of enties to be shown.");
-            p.Setup<int>("working-hours").SetDefault(8).Callback(x => workingHours = x).WithDescription("Typical number of working hours in a working day.");
-            p.SetupHelp("?", "help").Callback(x => Console.WriteLine(x));
         }
 
-        public override void Execute(string[] args)
+        public void Execute(MainArgs args)
         {
-            ValidateParams(p.Parse(args));
-
             var user = svc.Item.WhoAmI();
+            from = args.OptFrom;
+            to = args.OptTo;
+
+            workingHours = args.OptWorkingHOurs;
+            limit = args.OptWorkingHOurs;
             var items = svc.Item.GetFilteredItems(new IssuesFilter
             {
                 IncludeClosed = true,
@@ -45,6 +44,8 @@ namespace BaconTime.Terminal.Commands
 
             times
                 .Where(x => x.Time.Entity.UserId == user.Entity.Id)
+                .Where(x => x.Time.Entity.EntryDate >= from)
+                .Where(x => x.Time.Entity.EntryDate <= to)
                 .GroupBy(x => x.Time.Entity.EntryDate.Date)
                 .OrderByDescending(x => x.Key)
                 .Select(x => new object[]

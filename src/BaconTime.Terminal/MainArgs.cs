@@ -7,32 +7,45 @@ namespace BaconTime.Terminal
 {
     public class MainArgs
     {
-        public const string USAGE = @"Magic Times
+        public const string Usage = @"Magic Times
 
     Usage:
-      magictimes log <time> <ticket> [--when=<date>] [--time-type=<type>] <message>... 
+      magictimes log <time> <ticket> [--when=<date>] [--log-type=<type>] <message>... 
+      magictimes show logged hours <user> [--from=<date>]  [--to=<date>]  [--working-hours=<hours>]  
 
     Options:
-      -h --help             Show this screen.
-      --when=<date>         The date for wen time log entry YYYY-MM-DD [default:now]
-      --time-type=<type>    Type of timelogging billable [default:30]
+      -h --help                 Show this screen.
+      --when=<date>             The date for wen time log entry YYYY-MM-DD [default:now]
+      --log-type=<type>         Type of timelogging billable [default:30]
+      --from=<date>             The first inclussive date of the time period [default:today-30days]
+      --working-hours=<hours>   The number of working hours in a working day [default:8]
     ";
         private readonly IDictionary<string, ValueObject> args;
         public MainArgs(ICollection<string> argv, bool help = true, object version = null, bool optionsFirst = false, bool exit = false)
         {
-            args = new Docopt().Apply(USAGE, argv, help, version, optionsFirst, exit);
+            args = new Docopt().Apply(Usage, argv, help, version, optionsFirst, exit);
         }
 
         public IDictionary<string, ValueObject> Args => args;
 
         public bool CmdLog => args["log"].IsTrue;
+        public bool CmdShowLoggedHours => args["show"].IsTrue && args["logged"].IsTrue && args["hours"].IsTrue;
 
         public int OptTicket => Convert.ToInt32(args["<ticket>"].ToString());
-        public int OptTimeType => args.ContainsKey("time-type") ? Convert.ToInt32(args["time-type"].ToString()) : 30;
+        public int OptTimeType => Extract("log-type", 30);
+        public DateTime OptWhen => Extract("When", DateTime.Now);
+        public int OptWorkingHOurs => Extract("working-hours", 8);
+
+        private T Extract<T>(string key, T defaultValue) => args.ContainsKey(key) ? (T)Convert.ChangeType(args[key].Value, typeof(T)) : defaultValue;
+
         public int OptHours => ConvertTo(args["<time>"].ToString(), "h");
         public int OptMinutes => ConvertTo(args["<time>"].ToString(), "h");
+
+        public DateTime OptFrom => DateTime.Today.AddDays(-30);
+        public DateTime OptTo => DateTime.Today;
+
         public string OptMessage => string.Join(" ", args["<message>"].AsList);
-        
+
         private static int ConvertTo(string hours, string tag)
         {
             var pattern = $@".*(\d+){tag}.*";

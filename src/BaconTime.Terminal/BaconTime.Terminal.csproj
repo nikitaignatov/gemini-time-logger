@@ -83,10 +83,10 @@
   <ItemGroup>
     <Compile Include="BaseCommand.cs" />
     <Compile Include="CommandRunner.cs" />
-    <Compile Include="Commands\DayReportCommand.cs" />
+    <Compile Include="Commands\ShowLoggedHoursCommand.cs" />
     <Compile Include="Commands\TimeLoggedByUserGroupedByItemCommand.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="Commands\LogHoursCommand.cs" />
+    <Compile Include="Commands\LogTimeCommand.cs" />
     <Compile Include="Extensions\IssueTimeTrackingExtensions.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="MainArgs.cs" />
