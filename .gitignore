@@ -280,3 +280,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 src/BaconTime.Spec/gemini_settings.config
+src/BaconTime.Terminal/gemini_settings.config

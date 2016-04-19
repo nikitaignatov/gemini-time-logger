@@ -1,37 +1,39 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Countersoft.Gemini.Api;
 using Countersoft.Gemini.Commons.Entity;
+using DocoptNet;
 using Fclp;
 
 namespace BaconTime.Terminal.Commands
 {
-    public class LogHoursCommand : BaseCommand
+    public class LogHoursCommand
     {
         private readonly ServiceManager svc;
-        private FluentCommandLineParser<IssueTimeTracking> p;
-
         public LogHoursCommand(ServiceManager svc)
         {
             this.svc = svc;
-            p = new FluentCommandLineParser<IssueTimeTracking>();
-
-            p.Setup(x => x.IssueId).As('t', "ticket").Required().WithDescription("the id of te issue number.");
-            p.Setup(x => x.Comment).As('c', "comment").Required();
-
-            p.Setup(x => x.EntryDate).As('d', "date").SetDefault(DateTime.Today);
-            p.Setup(x => x.Hours).As('h', "hours").SetDefault(0);
-            p.Setup(x => x.Minutes).As('m', "minutes").SetDefault(0);
-            p.Setup(x => x.TimeTypeId).As("time-type").SetDefault(30);
         }
 
-        public override void Execute(string[] args)
+        public IssueTimeTracking ToIssueTimeTracking(MainArgs args)
         {
-            ValidateParams(p.Parse(args));
+            return new IssueTimeTracking
+            {
+                IssueId = args.OptTicket,
+                TimeTypeId = args.OptTimeType,
+                Hours = args.OptHours,
+                Minutes = args.OptMinutes,
+                Comment = args.OptMessage,
+            };
+        }
 
+        public void Execute(MainArgs args)
+        {
             var now = DateTime.Now;
-            var log = p.Object;
-
-            if (log.Minutes + log.Hours == 0) throw new Exception("-h and -m for hours and minutes are missing.");
+            var log = ToIssueTimeTracking(args);
+            if (log.Minutes + log.Hours == 0) throw new Exception("total time of 0, this is not possibleto log.");
 
             var user = svc.Item.WhoAmI();
             var issue = svc.Item.Get(log.IssueId);
@@ -41,7 +43,6 @@ namespace BaconTime.Terminal.Commands
             log.Archived = false;
             log.Deleted = false;
             log.Created = now;
-            log.TimeTypeId = 30;
             log.ProjectId = issue.Project.Id;
 
             svc.Item.LogTime(log);

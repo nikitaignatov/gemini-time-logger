@@ -51,7 +51,7 @@ namespace BaconTime.Terminal.Commands
                     x.Time.Fullname.Shorten(10),
                     x.Entity.Id,
                     x.Entity.Title.Shorten(20),
-                    x.Time.Entity.EntryDate,
+                    x.Time.Entity.EntryDate.ToString("yyyy-MM-dd"),
                     x.Time.Hours(),
                     x.Time.Entity.Comment.Shorten(25)
                 })
