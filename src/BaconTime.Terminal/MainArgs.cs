@@ -18,6 +18,7 @@ namespace BaconTime.Terminal
       --when=<date>             The date for wen time log entry YYYY-MM-DD [default:now]
       --log-type=<type>         Type of timelogging billable [default:30]
       --from=<date>             The first inclussive date of the time period [default:today-30days]
+      --to=<date>           The last inclussive date of the time period [default:today]
       --working-hours=<hours>   The number of working hours in a working day [default:8]
     ";
         private readonly IDictionary<string, ValueObject> args;
@@ -32,9 +33,9 @@ namespace BaconTime.Terminal
         public bool CmdShowLoggedHours => args["show"].IsTrue && args["logged"].IsTrue && args["hours"].IsTrue;
 
         public int OptTicket => Convert.ToInt32(args["<ticket>"].ToString());
-        public int OptTimeType => Extract("log-type", 30);
-        public DateTime OptWhen => Extract("When", DateTime.Now);
-        public int OptWorkingHOurs => Extract("working-hours", 8);
+        public int OptTimeType => Extract("--log-type", 30);
+        public DateTime OptWhen => Extract("--when", DateTime.Now);
+        public int OptWorkingHOurs => Extract("--working-hours", 8);
 
         private T Extract<T>(string key, T defaultValue) => args.ContainsKey(key) ? (T)Convert.ChangeType(args[key].Value, typeof(T)) : defaultValue;
 
