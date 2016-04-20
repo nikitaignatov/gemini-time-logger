@@ -1,6 +1,5 @@
 ﻿using System;
 using BaconTime.Terminal;
-using BaconTime.Terminal.Attributes;
 using BaconTime.Terminal.Commands;
 using DocoptNet;
 using FluentAssertions;
