@@ -17,7 +17,7 @@ Scenario: show time for ticket
 	Given I have a ticket
 	And I execute log log 1h10m id --when 2016-01-31 Hi mom 
 	And I execute log log 8h30m id --when 2015-01-31 Working Hard 
-	When I execute show show time ticket id
+	When I execute show show logs ticket id
 	Then message is shown
 	"""
 | user         | date       | hours   | message      |

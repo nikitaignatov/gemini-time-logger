@@ -1,12 +1,9 @@
-﻿using System;
-using System.Configuration;
-using System.Linq;
-using BaconTime.Terminal.Commands;
-using Countersoft.Gemini.Api;
-using Format = ConsoleTables.Core.Format;
-
-namespace BaconTime.Terminal
+﻿namespace BaconTime.Terminal
 {
+    using System;
+    using System.Linq;
+    using Format = ConsoleTables.Core.Format;
+
     class Program
     {
         static void Main(string[] argv)

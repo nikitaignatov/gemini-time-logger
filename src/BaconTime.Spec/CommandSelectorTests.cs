@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BaconTime.Terminal;
 using BaconTime.Terminal.Attributes;
 using BaconTime.Terminal.Commands;
 using DocoptNet;
 using FluentAssertions;
-using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
 
 namespace BaconTime.Spec

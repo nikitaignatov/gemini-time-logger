@@ -1,7 +1,6 @@
-using System;
-
-namespace BaconTime.Terminal.Attributes
+namespace BaconTime.Terminal
 {
+    using System;
     public class CommandAttribute : Attribute
     {
         public string[] Command { get; }

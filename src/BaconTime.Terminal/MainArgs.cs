@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using BaconTime.Terminal.Commands;
-using DocoptNet;
-
-namespace BaconTime.Terminal
+﻿namespace BaconTime.Terminal
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text.RegularExpressions;
+    using DocoptNet;
+
     public class MainArgs
     {
         public const string Usage = @"Magic Times
 
     Usage:
-      magictimes log <time> <ticket> [--when=<date>] [--log-type=<type>] <message>... 
+      magictimes log <time> <id> [--when=<date>] [--log-type=<type>] <message>... 
       magictimes create ticket <project> <state> <title>...
       magictimes show logs my
       magictimes show logs project <id> [--from=<date>] [--to=<date>]
-      magictimes show logs ticket <id> [--from=<date>] [--to=<date>]
+      magictimes show logs ticket <id> [my] [--from=<date>] [--to=<date>]
       magictimes show logs user <username> [--from=<date>]  [--to=<date>]
       magictimes show hours my 
       magictimes show hours by <user> [--from=<date>]  [--to=<date>]  [--working-hours=<hours>]  
@@ -34,23 +33,36 @@ namespace BaconTime.Terminal
         public MainArgs(ICollection<string> argv, bool help = true, object version = null, bool optionsFirst = false, bool exit = false)
         {
             args = new Docopt().Apply(Usage, argv, help, version, optionsFirst, exit);
+            Options = new Option(args);
         }
 
+        public Option Options { get; set; }
         public IDictionary<string, ValueObject> Args => args;
+        public class Option
+        {
+            public Option(IDictionary<string, ValueObject> mainArgs)
+            {
+                Args = mainArgs;
+            }
 
-        public int OptTicket => Convert.ToInt32(args["<ticket>"].ToString());
-        public int OptLogType => Extract("--log-type", 30);
-        public int OptWorkingHOurs => Extract("--working-hours", 8);
-        public int OptHours => ConvertTo(args["<time>"].ToString(), "h");
-        public int OptMinutes => ConvertTo(args["<time>"].ToString(), "m");
+            public IDictionary<string, ValueObject> Args { get; }
 
+            public int Id => Convert.ToInt32(Args["<id>"].ToString());
+            public int Take => Convert.ToInt32(Args["--take"].ToString());
+            public int LogType => Extract(Args, "--log-type", 30);
+            public int WorkingHours => Extract(Args, "--working-hours", 8);
+            public int Hours => ConvertTo(Args["<time>"].ToString(), "h");
+            public int Minutes => ConvertTo(Args["<time>"].ToString(), "m");
+        }
+
+        public bool ArgMy => args["my"].IsTrue;
         public string OptMessage => string.Join(" ", args["<message>"]?.AsList?.ToArray());
 
-        public DateTime OptWhen => Extract("--when", DateTime.Now);
+        public DateTime OptWhen => Extract(Args, "--when", DateTime.Now);
         public DateTime OptFrom => DateTime.Today.AddDays(-30);
         public DateTime OptTo => DateTime.Today;
 
-        private T Extract<T>(string key, T defaultValue) => args[key]?.Value != null ? (T)Convert.ChangeType(args[key]?.Value?.ToString(), typeof(T)) : defaultValue;
+        private static T Extract<T>(IDictionary<string, ValueObject> args, string key, T defaultValue) => args[key]?.Value != null ? (T)Convert.ChangeType(args[key]?.Value?.ToString(), typeof(T)) : defaultValue;
 
         private static int ConvertTo(string hours, string tag)
         {

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using BaconTime.Terminal.Attributes;
 using Countersoft.Gemini.Api;
 using DocoptNet;
 using SimpleInjector;

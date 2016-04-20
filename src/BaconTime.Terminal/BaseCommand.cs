@@ -1,12 +1,6 @@
-using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using Countersoft.Gemini.Api;
-using Fclp;
-
 namespace BaconTime.Terminal
 {
+    using Countersoft.Gemini.Api;
     public abstract class BaseCommand : ICommand
     {
         public abstract void Execute(MainArgs args);

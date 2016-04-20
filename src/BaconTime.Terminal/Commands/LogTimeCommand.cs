@@ -1,5 +1,4 @@
 using System;
-using BaconTime.Terminal.Attributes;
 using Countersoft.Gemini.Api;
 using Countersoft.Gemini.Commons.Entity;
 
@@ -9,18 +8,14 @@ namespace BaconTime.Terminal.Commands
     public class LogTimeCommand : ServiceManagerCommand
     {
         public LogTimeCommand(ServiceManager svc) : base(svc) { }
-
-        [Option("ticket")]
-        public int IssueId { get; set; }
-
         public IssueTimeTracking ToIssueTimeTracking(MainArgs args)
         {
             return new IssueTimeTracking
             {
-                IssueId = args.OptTicket,
-                TimeTypeId = args.OptLogType,
-                Hours = args.OptHours,
-                Minutes = args.OptMinutes,
+                IssueId = args.Options.Id,
+                TimeTypeId = args.Options.LogType,
+                Hours = args.Options.Hours,
+                Minutes = args.Options.Minutes,
                 Comment = args.OptMessage,
                 EntryDate = args.OptWhen
             };

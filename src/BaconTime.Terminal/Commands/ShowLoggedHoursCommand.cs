@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using BaconTime.Terminal.Attributes;
 using BaconTime.Terminal.Extensions;
 using ConsoleTables.Core;
 using Countersoft.Gemini.Api;
@@ -14,7 +13,7 @@ namespace BaconTime.Terminal.Commands
     public class ShowLoggedHoursCommand : BaseCommand
     {
         private readonly ServiceManager svc;
-        private int limit = 100;
+        private int take = 100;
         private int workingHours;
 
         public ShowLoggedHoursCommand(ServiceManager svc)
@@ -26,8 +25,8 @@ namespace BaconTime.Terminal.Commands
         {
             var user = svc.Item.WhoAmI();
 
-            workingHours = args.OptWorkingHOurs;
-            limit = args.OptWorkingHOurs;
+            workingHours = args.Options.WorkingHours;
+            take = args.Options.Take;
             var items = svc.Item
                 .GetFilteredItems(new IssuesFilter
                 {
@@ -55,7 +54,7 @@ namespace BaconTime.Terminal.Commands
                     x.Sum(m=>m.Time.Hours()),
                     workingHours- x.Sum(m=>m.Time.Hours())
                 })
-                .Take(limit)
+                .Take(take)
                 .ForEach(x => table.AddRow(x));
 
             table.Write(Format.MarkDown);
