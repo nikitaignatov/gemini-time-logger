@@ -2,17 +2,23 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using Countersoft.Gemini.Api;
 using Fclp;
 
 namespace BaconTime.Terminal
 {
     public abstract class BaseCommand : ICommand
     {
-        public abstract void Execute(string[] args);
+        public abstract void Execute(MainArgs args);
+    }
 
-        protected void ValidateParams(ICommandLineParserResult result)
+    public abstract class ServiceManagerCommand : BaseCommand
+    {
+        public ServiceManager Svc { get; set; }
+
+        protected ServiceManagerCommand(ServiceManager svc)
         {
-            if (result.HasErrors) throw new ArgumentException(result.ErrorText);
+            Svc = svc;
         }
     }
 }

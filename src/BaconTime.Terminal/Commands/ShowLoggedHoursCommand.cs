@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using BaconTime.Terminal.Attributes;
 using BaconTime.Terminal.Extensions;
 using ConsoleTables.Core;
 using Countersoft.Gemini.Api;
@@ -9,7 +10,8 @@ using Format = ConsoleTables.Core.Format;
 
 namespace BaconTime.Terminal.Commands
 {
-    public class ShowLoggedHoursCommand
+    [Command("show", "hours", "my")]
+    public class ShowLoggedHoursCommand : BaseCommand
     {
         private readonly ServiceManager svc;
         private int limit = 100;
@@ -20,7 +22,7 @@ namespace BaconTime.Terminal.Commands
             this.svc = svc;
         }
 
-        public void Execute(MainArgs args)
+        public override void Execute(MainArgs args)
         {
             var user = svc.Item.WhoAmI();
 

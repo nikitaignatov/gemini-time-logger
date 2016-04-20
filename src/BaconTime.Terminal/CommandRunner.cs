@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using BaconTime.Terminal.Commands;
+using System.Linq;
+using BaconTime.Terminal.Attributes;
 using Countersoft.Gemini.Api;
-using Countersoft.Gemini.Commons.Entity;
 using DocoptNet;
-using Fclp;
-using Fclp.Internals;
 using SimpleInjector;
 
 namespace BaconTime.Terminal
@@ -14,36 +12,50 @@ namespace BaconTime.Terminal
     public class CommandRunner
     {
         private static Container container;
-        private static Configuration config;
-        private static IssueTimeTracking log;
 
-        private static readonly Dictionary<string, Type> Commands = new Dictionary<string, Type>
-        {
-            {"log",typeof(LogTimeCommand)},
-            {"show",typeof(TimeLoggedForItemCommand)},
-            {"show-all",typeof(TimeLoggedByUserGroupedByItemCommand)},
-            {"show-days",typeof(ShowLoggedHoursCommand)},
-            {"show-words",typeof(FrequentWordsCommand)},
-        };
-
-        public void Run(string[] args)
+        public void Run(MainArgs args)
         {
             container = new Container();
+            container.Register(LoadService);
             container.Verify();
-
-            ((ICommand)container.GetInstance(Commands[config.command])).Execute(args);
+            var cmd = typeof(ICommand).Assembly.ExportedTypes;
+            var command = LoadCommand(args.Args, cmd);
+            ((ICommand)container.GetInstance(command)).Execute(args);
         }
-        
-        private User LoadUser(ServiceManager svc)
+
+        public static Type LoadCommand(IDictionary<string, ValueObject> args, IEnumerable<Type> types)
         {
-            try
+            var commands = types
+                .Where(x => typeof(ICommand).IsAssignableFrom(x))
+                .Where(x => !(x.IsAbstract || x.IsInterface))
+                .Where(x => x.IsDefined(typeof(CommandAttribute), false))
+                .Select(x => new
+                {
+                    type = x,
+                    command = x.GetCustomAttributes(typeof(CommandAttribute), false).OfType<CommandAttribute>().First().Command
+                })
+                .Where(x => x.command.All(c => args[c].IsTrue))
+                .ToArray();
+
+            if (!commands.Any())
             {
-                return svc.Item.WhoAmI().Entity;
+                throw new Exception("no command matched the provided args");
             }
-            catch (Exception e)
+
+            if (commands.Count(x => x.command.All(c => args[c].IsTrue)) > 1)
             {
-                throw new Exception($"Could not find user with username: {config.username}, " + e.Message, e);
+                var existingCommands = string.Join("\\n", commands.Select(x => x.type.Name));
+                throw new Exception($"make sure only one command is matching the args, in this case following commands matched:\\n{existingCommands}");
             }
+
+            var command = commands.First();
+            return command.type;
+        }
+
+        private static ServiceManager LoadService()
+        {
+            var settings = ConfigurationManager.AppSettings;
+            return new ServiceManager(settings["endpoint"], settings["username"], "", settings["apikey"]);
         }
     }
 }

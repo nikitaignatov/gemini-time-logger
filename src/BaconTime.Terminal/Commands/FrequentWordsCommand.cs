@@ -38,10 +38,8 @@ namespace BaconTime.Terminal.Commands
 
         private static string Clean(string e) => Regex.Replace(e.ToLower(), @"\s+", " ");
 
-        public override void Execute(string[] args)
+        public override void Execute(MainArgs args)
         {
-            ValidateParams(p.Parse(args));
-
             var user = svc.Item.WhoAmI();
             var items = svc.Item.GetFilteredItems(new IssuesFilter
             {

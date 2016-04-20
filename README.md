@@ -4,20 +4,36 @@
 Create a logger.bat file 
 
 ```bat
-@echo off
-set cli= "C:\tools\timelogger\BaconTime.terminal.exe"
-%cli% --endpoint <HTTP://DEMOIU.ONGEMINI.COM> --username <USERNAME> --apikey <APIKEY> --cmd %*  
-```
-Replace the params with your credentials and the url to Gemini.
+Magic Times
 
-You can also omit the ```--endpoint``` ```--username and``` ```--apikey```
+    Usage:
+      magictimes log <time> <ticket> [--when=<date>] [--log-type=<type>] <message>... 
+      magictimes create ticket <project> <state> <title>...
+      magictimes show logs my
+      magictimes show logs project <id> [--from=<date>] [--to=<date>]
+      magictimes show logs ticket <id> [--from=<date>] [--to=<date>]
+      magictimes show logs user <username> [--from=<date>]  [--to=<date>]
+      magictimes show hours my 
+      magictimes show hours by <user> [--from=<date>]  [--to=<date>]  [--working-hours=<hours>]  
+      magictimes show words my [--stemmed]
+      magictimes show words all [--stemmed]
+
+    Options:
+      -h --help                 Show this screen.
+      --when=<date>             The date for wen time log entry YYYY-MM-DD [default:now]
+      --log-type=<type>         Type of timelogging billable [default:30]
+      --from=<date>             The first inclussive date of the time period [default:today-30days]
+      --to=<date>               The last inclussive date of the time period [default:today]
+      --working-hours=<hours>   The number of working hours in a working day [default:8]
+```
+
+Create a ```.bat``` file with a path to your application.
 
 ```bat
 @echo off
-"C:\tools\timelogger\BaconTime.terminal.exe"  --cmd %*  
+"C:\tools\timelogger\BaconTime.terminal.exe" %*  
 ```
-
-and define the values in app.config instead.
+in app.config Replace the values with your credentials and the url to Gemini.
 
 ```xml
 <appSettings>
@@ -31,12 +47,12 @@ and define the values in app.config instead.
 Then you can log the time as in the example below
 
 ```bat
-logger log -t 1024 -h 1    -m 10   -c "Hi mom"    
-logger log -t 256  -m 10   -c work                           
-logger log -t 512  -h 1    -c work            
-logger log -t 16   -c work -h 1              
-logger log -t 1024 -h 10   -c "work hard" 
-logger log -t 128  -m 1    -c  hi   
+logger log 1h10m 1024 "Hi mom"                 
+logger log 10h10m 512 Hi mom                             
+logger log 10m 16 work --when 2016-02-08 
+logger log 1h 32 "work"                  
+logger log 1h 256 work  --when 2010-04-16 
+logger log 10h 1024 "work very hard"       
 ```
 
 view time logged for a ticket:

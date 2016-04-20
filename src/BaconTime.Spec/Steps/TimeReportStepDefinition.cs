@@ -59,7 +59,7 @@ namespace BaconTime.Spec.Steps
             var ticket = ScenarioContext.Current.Get<IssueDto>();
             command = command.Replace("id", ticket.Id.ToString());
 
-            var report = StringExt.ConsoleSpy(() => new CommandRunner().Run(command.ToArgs()));
+            var report = StringExt.ConsoleSpy(() => new CommandRunner().Run(new MainArgs(command.ToArgs())));
             report.Trim().ShouldBeEquivalentTo("Time was logged.");
         }
 
@@ -69,13 +69,13 @@ namespace BaconTime.Spec.Steps
             var svc = ScenarioContext.Current.Get<ServiceManager>();
             var ticket = ScenarioContext.Current.Get<IssueDto>();
 
-            var entryDate = (date == "today" ? DateTime.Today : Convert.ToDateTime(date)).ToUniversalTime().Date;
+            var entryDate = (date == "today" ? DateTime.Today : Convert.ToDateTime(date)).Date;
 
             svc.Item.GetTimes(ticket.Id).Any().Should().BeTrue();
             var entry = svc.Item.GetTimes(ticket.Id).First().Entity;
             (entry.Minutes + (entry.Hours * 60)).ShouldBeEquivalentTo(total_minutes);
             entry.Comment.ShouldBeEquivalentTo(comment);
-            entry.EntryDate.ToUniversalTime().Date.ShouldBeEquivalentTo(entryDate);
+            entry.EntryDate.Date.ShouldBeEquivalentTo(entryDate);
         }
 
         [When(@"I execute show (.*)")]
@@ -85,7 +85,7 @@ namespace BaconTime.Spec.Steps
             var ticket = ScenarioContext.Current.Get<IssueDto>();
             command = command.Replace("id", ticket.Id.ToString());
 
-            var report = StringExt.ConsoleSpy(() => new CommandRunner().Run(command.ToArgs()));
+            var report = StringExt.ConsoleSpy(() => new CommandRunner().Run(new MainArgs(command.ToArgs())));
             ScenarioContext.Current.Set(report, "report");
         }
 

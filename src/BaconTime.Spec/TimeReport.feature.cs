@@ -65,12 +65,12 @@ namespace BaconTime.Spec
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("log time for ticket")]
-        [NUnit.Framework.TestCaseAttribute("--cmd log -t id -h 1 -m 10 -c \"Hi mom\"", "Hi mom", "70", "today", new string[0])]
-        [NUnit.Framework.TestCaseAttribute("--cmd log -t id -m 10 -c \"work\" -d 2016-01-31", "work", "10", "2016-01-31", new string[0])]
-        [NUnit.Framework.TestCaseAttribute("--cmd log -t id -h 1 -c \"work\"", "work", "60", "today", new string[0])]
-        [NUnit.Framework.TestCaseAttribute("--cmd log -t id -c work -h 1 -d 2010-02-18", "work", "60", "2010-02-18", new string[0])]
-        [NUnit.Framework.TestCaseAttribute("--cmd log -t id -h 10 -c \"work very hard\"", "work very hard", "600", "today", new string[0])]
-        [NUnit.Framework.TestCaseAttribute("--cmd log -t id -m 1 -c  hi", "hi", "1", "today", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("log 1h10m id \"Hi mom\"", "Hi mom", "70", "today", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("log 10h10m id Hi mom", "Hi mom", "610", "today", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("log 10m id work --when 2016-01-31", "work", "10", "2016-01-31", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("log 1h id \"work\"", "work", "60", "today", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("log 1h id work  --when 2010-02-18", "work", "60", "2010-02-18", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("log 10h id \"work very hard\"", "work very hard", "600", "today", new string[0])]
         public virtual void LogTimeForTicket(string command, string comment, string totalMinutes, string date, string[] exampleTags)
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("log time for ticket", exampleTags);
@@ -96,11 +96,11 @@ this.ScenarioSetup(scenarioInfo);
 #line 17
  testRunner.Given("I have a ticket", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 18
- testRunner.And("I execute log --cmd log -t id -h 1 -m 10 -d 2016-01-31 -c \"Hi mom\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I execute log log 1h10m id --when 2016-01-31 Hi mom", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 19
- testRunner.And("I execute log --cmd log -t id -h 8 -m 30 -d 2015-01-31 -c \"Working Hard\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I execute log log 8h30m id --when 2015-01-31 Working Hard", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 20
- testRunner.When("I execute show --cmd show -t id", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I execute show show time ticket id", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 21
  testRunner.Then("message is shown", "| user         | date       | hours   | message      |\r\n|--------------|---------" +
@@ -122,13 +122,13 @@ this.ScenarioSetup(scenarioInfo);
 #line 31
  testRunner.Given("I have another  ticket", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 32
- testRunner.And("I execute log --cmd log -t id -h 1 -m 10 -d 2016-01-31 -c \"Hi mom\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I execute log log 1h10m id --when 2016-01-31 Hi mom", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 33
- testRunner.And("I execute log --cmd log -t id -h 8 -m 30 -d 2015-01-31 -c \"Working Hard\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I execute log log 8h30m id --when 2015-01-31 Working Hard", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 34
- testRunner.And("I execute log --cmd log -t another-id -h 8 -m 30 -d 2015-01-30 -c \"Working Hard\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I execute log log 8h30m another-id --when 2015-01-30 Working Hard", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 35
- testRunner.When("I execute show --cmd show-all", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I execute show show time my", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 36
  testRunner.Then("message is shown", @"| user         | id         | date       | hours   | message      |

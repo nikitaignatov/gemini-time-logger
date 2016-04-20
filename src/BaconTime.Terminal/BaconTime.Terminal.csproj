@@ -83,7 +83,9 @@
   <ItemGroup>
     <Compile Include="BaseCommand.cs" />
     <Compile Include="CommandRunner.cs" />
+    <Compile Include="Attributes\CommandAttribute.cs" />
     <Compile Include="Commands\FrequentWordsCommand.cs" />
+    <Compile Include="Attributes\OptionAttribute.cs" />
     <Compile Include="Commands\ShowLoggedHoursCommand.cs" />
     <Compile Include="Commands\TimeLoggedByUserGroupedByItemCommand.cs" />
     <Compile Include="Configuration.cs" />

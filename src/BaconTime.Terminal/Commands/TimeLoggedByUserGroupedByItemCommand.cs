@@ -29,10 +29,8 @@ namespace BaconTime.Terminal.Commands
             p.SetupHelp("?", "help").Callback(x => Console.WriteLine(x));
         }
 
-        public override void Execute(string[] args)
+        public override void Execute(MainArgs args)
         {
-            ValidateParams(p.Parse(args));
-
             var user = svc.Item.WhoAmI();
             var items = svc.Item.GetFilteredItems(new IssuesFilter
             {

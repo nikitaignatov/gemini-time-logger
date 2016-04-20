@@ -14,9 +14,7 @@ namespace BaconTime.Terminal
             var args = new MainArgs(argv, help: true, exit: true);
             try
             {
-                var svc = LoadService();
-                if (args.CmdLog) new LogTimeCommand(svc).Execute(args);
-                if (args.CmdShowLoggedHours) new ShowLoggedHoursCommand(svc).Execute(args);
+                new CommandRunner().Run(args);
             }
             catch (Exception e)
             {
@@ -25,12 +23,6 @@ namespace BaconTime.Terminal
                 Console.WriteLine("\nInput args:\n");
                 ConsoleTables.Core.ConsoleTable.From(args.Args.ToList()).Write(Format.MarkDown);
             }
-        }
-
-        private static ServiceManager LoadService()
-        {
-            var settings = ConfigurationManager.AppSettings;
-            return new ServiceManager(settings["endpoint"], settings["username"], "", settings["apikey"]);
         }
     }
 }

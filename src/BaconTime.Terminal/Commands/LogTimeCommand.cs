@@ -1,13 +1,17 @@
 using System;
+using BaconTime.Terminal.Attributes;
 using Countersoft.Gemini.Api;
 using Countersoft.Gemini.Commons.Entity;
 
 namespace BaconTime.Terminal.Commands
 {
-    public class LogTimeCommand
+    [Command("log")]
+    public class LogTimeCommand : ServiceManagerCommand
     {
-        private readonly ServiceManager svc;
-        public LogTimeCommand(ServiceManager svc) { this.svc = svc; }
+        public LogTimeCommand(ServiceManager svc) : base(svc) { }
+
+        [Option("ticket")]
+        public int IssueId { get; set; }
 
         public IssueTimeTracking ToIssueTimeTracking(MainArgs args)
         {
@@ -22,14 +26,14 @@ namespace BaconTime.Terminal.Commands
             };
         }
 
-        public void Execute(MainArgs args)
+        public override void Execute(MainArgs args)
         {
             var now = DateTime.Now;
             var log = ToIssueTimeTracking(args);
             if (log.Minutes + log.Hours == 0) throw new Exception("total time of 0, this is not possibleto log.");
 
-            var user = svc.Item.WhoAmI();
-            var issue = svc.Item.Get(log.IssueId);
+            var user = Svc.Item.WhoAmI();
+            var issue = Svc.Item.Get(log.IssueId);
 
             log.UserId = user.Entity.Id;
             log.Active = true;
@@ -38,7 +42,7 @@ namespace BaconTime.Terminal.Commands
             log.Created = now;
             log.ProjectId = issue.Project.Id;
 
-            svc.Item.LogTime(log);
+            Svc.Item.LogTime(log);
             Console.WriteLine("Time was logged.");
         }
     }

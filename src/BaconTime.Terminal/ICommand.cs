@@ -2,6 +2,6 @@ namespace BaconTime.Terminal
 {
     public interface ICommand
     {
-        void Execute(string[] args);
+        void Execute(MainArgs args);
     }
 }
