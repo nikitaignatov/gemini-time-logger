@@ -4,27 +4,24 @@
 Create a logger.bat file 
 
 ```bat
-Magic Times
+Usage:
+    magictimes log <time> <id> [--when=<date>] [--log-type=<type>] <message>... 
+    magictimes create ticket <project> <state> <title>...
+    magictimes show logs my
+    magictimes show logs project <id> [--from=<date>] [--to=<date>]
+    magictimes show logs ticket  <id> [my] [--from=<date>] [--to=<date>]
+    magictimes show logs user <username> [--from=<date>]  [--to=<date>]
+    magictimes show hours my 
+    magictimes show hours by <user> [--from=<date>]  [--to=<date>]  [--working-hours=<hours>]  
+    magictimes show words [--stemmed] [--all]
 
-    Usage:
-      magictimes log <time> <ticket> [--when=<date>] [--log-type=<type>] <message>... 
-      magictimes create ticket <project> <state> <title>...
-      magictimes show logs my
-      magictimes show logs project <id> [--from=<date>] [--to=<date>]
-      magictimes show logs ticket <id> [--from=<date>] [--to=<date>]
-      magictimes show logs user <username> [--from=<date>]  [--to=<date>]
-      magictimes show hours my 
-      magictimes show hours by <user> [--from=<date>]  [--to=<date>]  [--working-hours=<hours>]  
-      magictimes show words my [--stemmed]
-      magictimes show words all [--stemmed]
-
-    Options:
-      -h --help                 Show this screen.
-      --when=<date>             The date for wen time log entry YYYY-MM-DD [default:now]
-      --log-type=<type>         Type of timelogging billable [default:30]
-      --from=<date>             The first inclussive date of the time period [default:today-30days]
-      --to=<date>               The last inclussive date of the time period [default:today]
-      --working-hours=<hours>   The number of working hours in a working day [default:8]
+Options:
+    -h --help                 Show this screen.
+    --when=<date>             The date for wen time log entry YYYY-MM-DD [default:now]
+    --log-type=<type>         Type of timelogging billable [default:30]
+    --from=<date>             The first inclussive date of the time period [default:today-30days]
+    --to=<date>               The last inclussive date of the time period [default:today]
+    --working-hours=<hours>   The number of working hours in a working day [default:8]
 ```
 
 Create a ```.bat``` file with a path to your application.
