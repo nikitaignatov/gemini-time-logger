@@ -111,26 +111,85 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("show words for current user")]
+        public virtual void ShowWordsForCurrentUser()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("show words for current user", ((string[])(null)));
+#line 28
+this.ScenarioSetup(scenarioInfo);
+#line 29
+ testRunner.Given("I have a ticket", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 30
+ testRunner.And("I execute log log 1h10m id design of the new api", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 31
+ testRunner.And("I execute log log 4h id implementation of the api and unit tests", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 32
+ testRunner.And("I execute log log 1h10m id testing", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 33
+ testRunner.And("I execute log log 3h10m id refactoring", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 34
+ testRunner.And("I execute log log 2h40m id deployment and testing", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 35
+ testRunner.And("I execute log log 1h id fixing an isue", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 36
+ testRunner.And("I execute log log 8h30m id --when 2015-01-31 fixing an issue", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 37
+ testRunner.When("I execute show show words", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 38
+ testRunner.Then("message is shown", @"| word                         | percent |
+|------------------------------|---------|
+| hi                           | 26.0    |
+| mom                          | 24.0    |
+| system.collections.arraylist | 20.0    |
+| fixing                       | 12.0    |
+| testing                      | 10.0    |
+| api                          | 8.0     |
+| tests                        | 8.0     |
+| unit                         | 6.0     |
+| issue                        | 4.0     |
+| design                       | 4.0     |
+| new                          | 4.0     |
+| implementation               | 4.0     |
+| refactoring                  | 4.0     |
+| deployment                   | 4.0     |
+| isue                         | 4.0     |
+| working                      | 2.0     |
+| hard                         | 2.0     |
+| database                     | 2.0     |
+| schema                       | 2.0     |
+| writing                      | 2.0     |
+| test                         | 2.0     |
+| added                        | 2.0     |
+| bug                          | 2.0     |
+| moe                          | 2.0     |
+| work                         | 2.0     |
+| commited                     | 2.0     |", ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("show all time")]
         public virtual void ShowAllTime()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("show all time", ((string[])(null)));
-#line 29
+#line 70
 this.ScenarioSetup(scenarioInfo);
-#line 30
+#line 71
  testRunner.Given("I have a ticket", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 31
+#line 72
  testRunner.Given("I have another  ticket", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 32
+#line 73
  testRunner.And("I execute log log 1h10m id --when 2016-01-31 Hi mom", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 33
+#line 74
  testRunner.And("I execute log log 8h30m id --when 2015-01-31 Working Hard", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 34
+#line 75
  testRunner.And("I execute log log 8h30m another-id --when 2015-01-30 Working Hard", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 35
+#line 76
  testRunner.When("I execute show show time my", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 36
+#line 77
  testRunner.Then("message is shown", @"| user         | id         | date       | hours   | message      |
 |--------------|------------|------------|---------|--------------|
 | Peter Jensen | id         | 2016-01-31 | 1.2     | Hi mom       |

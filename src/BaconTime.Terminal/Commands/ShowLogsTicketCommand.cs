@@ -20,7 +20,7 @@ namespace BaconTime.Terminal.Commands
         public override void Execute(MainArgs args)
         {
             var user = Svc.Item.WhoAmI();
-            var times = Svc.Item.GetTimes(args.Options.Id);
+            var times = Svc.Item.GetTimes(args.Arguments.Id);
 
             var table = new ConsoleTable("user", "date", "hours", "message");
 

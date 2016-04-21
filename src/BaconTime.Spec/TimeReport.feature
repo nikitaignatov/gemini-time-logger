@@ -25,6 +25,47 @@ Scenario: show time for ticket
 | Peter Jensen | 2016-01-31 | 1.2     | Hi mom       |
 | Peter Jensen | 2015-01-31 | 8.5     | Working Hard |
 	"""
+Scenario: show words for current user
+	Given I have a ticket
+	And I execute log log 1h10m id design of the new api
+	And I execute log log 4h id implementation of the api and unit tests
+	And I execute log log 1h10m id testing 
+	And I execute log log 3h10m id refactoring
+	And I execute log log 2h40m id deployment and testing
+	And I execute log log 1h id fixing an isue
+	And I execute log log 8h30m id --when 2015-01-31 fixing an issue
+	When I execute show show words 
+	Then message is shown
+	"""
+| word                         | percent |
+|------------------------------|---------|
+| hi                           | 26.0    |
+| mom                          | 24.0    |
+| system.collections.arraylist | 20.0    |
+| fixing                       | 12.0    |
+| testing                      | 10.0    |
+| api                          | 8.0     |
+| tests                        | 8.0     |
+| unit                         | 6.0     |
+| issue                        | 4.0     |
+| design                       | 4.0     |
+| new                          | 4.0     |
+| implementation               | 4.0     |
+| refactoring                  | 4.0     |
+| deployment                   | 4.0     |
+| isue                         | 4.0     |
+| working                      | 2.0     |
+| hard                         | 2.0     |
+| database                     | 2.0     |
+| schema                       | 2.0     |
+| writing                      | 2.0     |
+| test                         | 2.0     |
+| added                        | 2.0     |
+| bug                          | 2.0     |
+| moe                          | 2.0     |
+| work                         | 2.0     |
+| commited                     | 2.0     |
+	"""
 
 Scenario: show all time
 	Given I have a ticket

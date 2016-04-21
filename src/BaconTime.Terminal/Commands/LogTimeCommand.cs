@@ -12,12 +12,12 @@ namespace BaconTime.Terminal.Commands
         {
             return new IssueTimeTracking
             {
-                IssueId = args.Options.Id,
+                IssueId = args.Arguments.Id,
                 TimeTypeId = args.Options.LogType,
-                Hours = args.Options.Hours,
-                Minutes = args.Options.Minutes,
-                Comment = args.OptMessage,
-                EntryDate = args.OptWhen
+                Hours = args.Arguments.Hours,
+                Minutes = args.Arguments.Minutes,
+                Comment = args.Arguments.Message,
+                EntryDate = args.Options.When
             };
         }
 

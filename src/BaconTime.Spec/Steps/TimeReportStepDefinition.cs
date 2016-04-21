@@ -55,9 +55,8 @@ namespace BaconTime.Spec.Steps
         [When(@"^I execute log (.*)$")]
         public void WhenIExecuteLogCommand(string command)
         {
-            var svc = ScenarioContext.Current.Get<ServiceManager>();
             var ticket = ScenarioContext.Current.Get<IssueDto>();
-            command = command.Replace("id", ticket.Id.ToString());
+            command = command.Replace(" id ", $" {ticket.Id} ");
 
             var report = StringExt.ConsoleSpy(() => new CommandRunner().Run(new MainArgs(command.ToArgs())));
             report.Trim().ShouldBeEquivalentTo("Time was logged.");
@@ -81,7 +80,6 @@ namespace BaconTime.Spec.Steps
         [When(@"I execute show (.*)")]
         public void WhenIExecuteShowLog_TId(string command)
         {
-            var svc = ScenarioContext.Current.Get<ServiceManager>();
             var ticket = ScenarioContext.Current.Get<IssueDto>();
             command = command.Replace("id", ticket.Id.ToString());
 
@@ -93,6 +91,7 @@ namespace BaconTime.Spec.Steps
         public void ThenMessageIsShown(string expected)
         {
             var report = ScenarioContext.Current.Get<string>("report");
+            Console.WriteLine(report);
             report.Should().Contain(expected);
         }
     }

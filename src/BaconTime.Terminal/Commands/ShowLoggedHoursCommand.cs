@@ -32,8 +32,8 @@ namespace BaconTime.Terminal.Commands
                 {
                     IncludeClosed = true,
                     TimeLoggedBy = user.Entity.Id + "",
-                    TimeLoggedAfter = args.OptFrom.ToString("yyyy-MM-dd"),
-                    TimeLoggedBefore = args.OptTo.ToString("yyyy-MM-dd")
+                    TimeLoggedAfter = args.Options.From.ToString("yyyy-MM-dd"),
+                    TimeLoggedBefore = args.Options.To.ToString("yyyy-MM-dd")
                 })
                 .SelectMany(x => x.TimeEntries.Select(e => new { x.Entity, Time = e }))
                 .ToList();
@@ -44,8 +44,8 @@ namespace BaconTime.Terminal.Commands
 
             times
                 .Where(x => x.Time.Entity.UserId == user.Entity.Id)
-                .Where(x => x.Time.Entity.EntryDate >= args.OptFrom)
-                .Where(x => x.Time.Entity.EntryDate <= args.OptTo)
+                .Where(x => x.Time.Entity.EntryDate >= args.Options.From)
+                .Where(x => x.Time.Entity.EntryDate <= args.Options.To)
                 .GroupBy(x => x.Time.Entity.EntryDate.Date)
                 .OrderByDescending(x => x.Key)
                 .Select(x => new object[]

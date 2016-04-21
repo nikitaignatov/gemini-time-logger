@@ -14,12 +14,11 @@
       magictimes create ticket <project> <state> <title>...
       magictimes show logs my
       magictimes show logs project <id> [--from=<date>] [--to=<date>]
-      magictimes show logs ticket <id> [my] [--from=<date>] [--to=<date>]
+      magictimes show logs ticket  <id> [my] [--from=<date>] [--to=<date>]
       magictimes show logs user <username> [--from=<date>]  [--to=<date>]
       magictimes show hours my 
       magictimes show hours by <user> [--from=<date>]  [--to=<date>]  [--working-hours=<hours>]  
-      magictimes show words my [--stemmed]
-      magictimes show words all [--stemmed]
+      magictimes show words [--stemmed] [--all]
 
     Options:
       -h --help                 Show this screen.
@@ -34,42 +33,57 @@
         {
             args = new Docopt().Apply(Usage, argv, help, version, optionsFirst, exit);
             Options = new Option(args);
+            Arguments = new Argument(args);
         }
 
         public Option Options { get; set; }
+        public Argument Arguments { get; set; }
         public IDictionary<string, ValueObject> Args => args;
-        public class Option
-        {
-            public Option(IDictionary<string, ValueObject> mainArgs)
-            {
-                Args = mainArgs;
-            }
-
-            public IDictionary<string, ValueObject> Args { get; }
-
-            public int Id => Convert.ToInt32(Args["<id>"].ToString());
-            public int Take => Convert.ToInt32(Args["--take"].ToString());
-            public int LogType => Extract(Args, "--log-type", 30);
-            public int WorkingHours => Extract(Args, "--working-hours", 8);
-            public int Hours => ConvertTo(Args["<time>"].ToString(), "h");
-            public int Minutes => ConvertTo(Args["<time>"].ToString(), "m");
-        }
 
         public bool ArgMy => args["my"].IsTrue;
-        public string OptMessage => string.Join(" ", args["<message>"]?.AsList?.ToArray());
+    }
 
-        public DateTime OptWhen => Extract(Args, "--when", DateTime.Now);
-        public DateTime OptFrom => DateTime.Today.AddDays(-30);
-        public DateTime OptTo => DateTime.Today;
-
-        private static T Extract<T>(IDictionary<string, ValueObject> args, string key, T defaultValue) => args[key]?.Value != null ? (T)Convert.ChangeType(args[key]?.Value?.ToString(), typeof(T)) : defaultValue;
-
-        private static int ConvertTo(string hours, string tag)
+    public static class Ext
+    {
+        public static T Extract<T>(this IDictionary<string, ValueObject> args, string key, T defaultValue) => args[key]?.Value != null ? (T)Convert.ChangeType(args[key]?.Value?.ToString(), typeof(T)) : defaultValue;
+        public static int ConvertTo(this string hours, string tag)
         {
             var pattern = $@"(?<c>\d+){tag}";
             if (!Regex.IsMatch(hours, pattern, RegexOptions.IgnoreCase)) return 0;
             var value = Regex.Match(hours, pattern, RegexOptions.IgnoreCase).Groups["c"]?.Value;
             return Convert.ToInt32(value ?? "0");
         }
+    }
+
+    public class Option
+    {
+        public Option(IDictionary<string, ValueObject> mainArgs)
+        {
+            Args = mainArgs;
+        }
+
+        public IDictionary<string, ValueObject> Args { get; }
+
+        public int Take => Convert.ToInt32(Args["--take"].ToString());
+        public int LogType => Args.Extract("--log-type", 30);
+        public int WorkingHours => Args.Extract("--working-hours", 8);
+        public DateTime When => Args.Extract("--when", DateTime.Now);
+        public DateTime From => DateTime.Today.AddDays(-30);
+        public DateTime To => DateTime.Today;
+    }
+
+    public class Argument
+    {
+        public Argument(IDictionary<string, ValueObject> mainArgs)
+        {
+            Args = mainArgs;
+        }
+
+        public IDictionary<string, ValueObject> Args { get; }
+
+        public int Id => Convert.ToInt32(Args["<id>"].ToString());
+        public string Message => string.Join(" ", Args["<message>"]?.AsList?.ToArray());
+        public int Hours => Args["<time>"].ToString().ConvertTo("h");
+        public int Minutes => Args["<time>"].ToString().ConvertTo("m");
     }
 }
