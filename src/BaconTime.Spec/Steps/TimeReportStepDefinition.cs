@@ -4,8 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using BaconTime.Terminal;
-using BaconTime.Terminal.Commands;
-using Countersoft.Foundation.Commons.Extensions;
 using Countersoft.Gemini.Api;
 using Countersoft.Gemini.Commons.Dto;
 using Countersoft.Gemini.Commons.Entity;
@@ -22,18 +20,9 @@ namespace BaconTime.Spec.Steps
         {
             var s = ConfigurationManager.AppSettings;
             var svc = new ServiceManager(s["endpoint"], s["username"], "", s["apikey"]);
-            var project = svc.Projects.GetProjects().First();
-            var user = svc.Item.WhoAmI();
-
-            var ticket = svc.Item.Create(new Issue
-            {
-                Title = "Silly ticket",
-                Creator = user.Entity.Id,
-                Active = true,
-                ProjectId = project.Entity.Id
-            });
-
-            ScenarioContext.Current.Set(ticket);
+            var whoAmI = svc.Item.WhoAmI();
+            var filteredItems = svc.Item.GetFilteredItems(new IssuesFilter { TimeLoggedBy = whoAmI.Entity.Id + "" });
+            filteredItems.SelectMany(x => x.TimeEntries.Select(m => m.Entity)).ToList().ForEach(x => svc.Item.DeleteTime(x.IssueId, x.Id));
             ScenarioContext.Current.Set(svc);
         }
 
@@ -45,10 +34,22 @@ namespace BaconTime.Spec.Steps
             svc.Item.Delete(ticket.Id);
         }
 
-        [Given(@"I have a ticket")]
-        public void GivenIhaveATicket()
+        [Given(@"I have a ticket (.*)")]
+        public void GivenIhaveATicket(string title)
         {
-            ScenarioContext.Current.Get<IssueDto>().Should().NotBeNull();
+            var svc = ScenarioContext.Current.Get<ServiceManager>();
+            var project = svc.Projects.GetProjects().First();
+            var user = svc.Item.WhoAmI();
+
+            var ticket = svc.Item.Create(new Issue
+            {
+                Title = title,
+                Creator = user.Entity.Id,
+                Active = true,
+                ProjectId = project.Entity.Id
+            });
+
+            ScenarioContext.Current.Set(ticket);
         }
 
         [Given(@"^I execute log (.*)$")]
@@ -56,7 +57,7 @@ namespace BaconTime.Spec.Steps
         public void WhenIExecuteLogCommand(string command)
         {
             var ticket = ScenarioContext.Current.Get<IssueDto>();
-            command = command.Replace(" id ", $" {ticket.Id} ");
+            command = command.Replace("id", $" {ticket.Id} ");
 
             var report = StringExt.ConsoleSpy(() => new CommandRunner().Run(new MainArgs(command.ToArgs())));
             report.Trim().ShouldBeEquivalentTo("Time was logged.");
@@ -81,8 +82,9 @@ namespace BaconTime.Spec.Steps
         public void WhenIExecuteShowLog_TId(string command)
         {
             var ticket = ScenarioContext.Current.Get<IssueDto>();
-            command = command.Replace("id", ticket.Id.ToString());
+            command = command.Replace("id", $" {ticket.Id} ");
 
+            Console.WriteLine(command);
             var report = StringExt.ConsoleSpy(() => new CommandRunner().Run(new MainArgs(command.ToArgs())));
             ScenarioContext.Current.Set(report, "report");
         }

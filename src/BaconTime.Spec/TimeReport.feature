@@ -1,7 +1,7 @@
 ﻿Feature: TimeReport
 	
 Scenario Outline: log time for ticket
-	Given I have a ticket
+	Given I have a ticket square corners to round corners
 	When I execute log <command>
 	Then <total minutes>, <date> and the <comment> is added.
    Examples:
@@ -14,7 +14,7 @@ Scenario Outline: log time for ticket
    | log 10h id "work very hard"       | work very hard | 600           | today      |
 	
 Scenario: show time for ticket
-	Given I have a ticket
+	Given I have a ticket round corners to square corners
 	And I execute log log 1h10m id --when 2016-01-31 Hi mom 
 	And I execute log log 8h30m id --when 2015-01-31 Working Hard 
 	When I execute show show logs ticket id
@@ -26,7 +26,7 @@ Scenario: show time for ticket
 | Peter Jensen | 2015-01-31 | 8.5     | Working Hard |
 	"""
 Scenario: show words for current user
-	Given I have a ticket
+	Given I have a ticket implement webservice very fast
 	And I execute log log 1h10m id design of the new api
 	And I execute log log 4h id implementation of the api and unit tests
 	And I execute log log 1h10m id testing 
@@ -44,36 +44,15 @@ Scenario: show words for current user
 | system.collections.arraylist | 20.0    |
 | fixing                       | 12.0    |
 | testing                      | 10.0    |
-| api                          | 8.0     |
-| tests                        | 8.0     |
-| unit                         | 6.0     |
-| issue                        | 4.0     |
-| design                       | 4.0     |
-| new                          | 4.0     |
-| implementation               | 4.0     |
-| refactoring                  | 4.0     |
-| deployment                   | 4.0     |
-| isue                         | 4.0     |
-| working                      | 2.0     |
-| hard                         | 2.0     |
-| database                     | 2.0     |
-| schema                       | 2.0     |
-| writing                      | 2.0     |
-| test                         | 2.0     |
-| added                        | 2.0     |
-| bug                          | 2.0     |
-| moe                          | 2.0     |
-| work                         | 2.0     |
-| commited                     | 2.0     |
 	"""
 
 Scenario: show all time
-	Given I have a ticket
-	Given I have another  ticket
+	Given I have a ticket silly business
+	And   I have another ticket silly billy
 	And I execute log log 1h10m id --when 2016-01-31 Hi mom 
 	And I execute log log 8h30m id --when 2015-01-31 Working Hard 
-	And I execute log log 8h30m another-id --when 2015-01-30 Working Hard 
-	When I execute show show time my
+	And I execute log log 8h30m id --when 2015-01-30 Working Hard 
+	When I execute show show hours my
 	Then message is shown
 	"""
 | user         | id         | date       | hours   | message      |
