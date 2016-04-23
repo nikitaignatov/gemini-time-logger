@@ -137,13 +137,16 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.When("I execute show show words", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 38
- testRunner.Then("message is shown", @"| word                         | percent |
-|------------------------------|---------|
-| hi                           | 26.0    |
-| mom                          | 24.0    |
-| system.collections.arraylist | 20.0    |
-| fixing                       | 12.0    |
-| testing                      | 10.0    |", ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("message is shown", "| word           | percent |\r\n|----------------|---------|\r\n| fixing         | 28" +
+                    ".6    |\r\n| api            | 28.6    |\r\n| testing        | 28.6    |\r\n| issue    " +
+                    "      | 14.3    |\r\n| design         | 14.3    |", ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 48
+ testRunner.When("I execute show show words --stemmed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 49
+ testRunner.Then("message is shown", "| word      | percent |\r\n|-----------|---------|\r\n| test      | 42.9    |\r\n| fix " +
+                    "      | 28.6    |\r\n| api       | 28.6    |\r\n| issu      | 14.3    |\r\n| design   " +
+                    " | 14.3    |", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -153,22 +156,22 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void ShowAllTime()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("show all time", ((string[])(null)));
-#line 49
+#line 60
 this.ScenarioSetup(scenarioInfo);
-#line 50
+#line 61
  testRunner.Given("I have a ticket silly business", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 51
+#line 62
  testRunner.And("I have another ticket silly billy", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 52
+#line 63
  testRunner.And("I execute log log 1h10m id --when 2016-01-31 Hi mom", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 53
+#line 64
  testRunner.And("I execute log log 8h30m id --when 2015-01-31 Working Hard", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 54
+#line 65
  testRunner.And("I execute log log 8h30m id --when 2015-01-30 Working Hard", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 55
+#line 66
  testRunner.When("I execute show show hours my", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 56
+#line 67
  testRunner.Then("message is shown", @"| user         | id         | date       | hours   | message      |
 |--------------|------------|------------|---------|--------------|
 | Peter Jensen | id         | 2016-01-31 | 1.2     | Hi mom       |

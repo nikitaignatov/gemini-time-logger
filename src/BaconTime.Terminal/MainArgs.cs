@@ -12,6 +12,7 @@
     Usage:
       magictimes log <time> <id> [--when=<date>] [--log-type=<type>] <message>... 
       magictimes create ticket <project> <state> <title>...
+      magictimes show project all
       magictimes show logs my
       magictimes show logs project <id> [--from=<date>] [--to=<date>]
       magictimes show logs ticket  <id> [my] [--from=<date>] [--to=<date>]
@@ -45,7 +46,7 @@
 
     public static class Ext
     {
-        public static T Extract<T>(this IDictionary<string, ValueObject> args, string key, T defaultValue) => args[key]?.Value != null ? (T)Convert.ChangeType(args[key]?.Value?.ToString(), typeof(T)) : defaultValue;
+        public static T Extract<T>(this IDictionary<string, ValueObject> args, string key, T defaultValue) => args.ContainsKey(key) && args[key]?.Value != null ? (T)Convert.ChangeType(args[key]?.Value?.ToString(), typeof(T)) : defaultValue;
         public static int ConvertTo(this string hours, string tag)
         {
             var pattern = $@"(?<c>\d+){tag}";
@@ -57,6 +58,8 @@
 
     public class Option
     {
+        private bool includeClosed;
+
         public Option(IDictionary<string, ValueObject> mainArgs)
         {
             Args = mainArgs;
@@ -64,12 +67,15 @@
 
         public IDictionary<string, ValueObject> Args { get; }
 
-        public int Take => Convert.ToInt32(Args["--take"].ToString());
+        public int Take => Args.Extract("--take", 25);
+        public bool Stemmed => Args.Extract("--stemmed", false);
+        public bool IncludeClosed => Args.Extract("--inculed-closed", false);
         public int LogType => Args.Extract("--log-type", 30);
         public int WorkingHours => Args.Extract("--working-hours", 8);
         public DateTime When => Args.Extract("--when", DateTime.Now);
         public DateTime From => DateTime.Today.AddDays(-30);
         public DateTime To => DateTime.Today;
+
     }
 
     public class Argument

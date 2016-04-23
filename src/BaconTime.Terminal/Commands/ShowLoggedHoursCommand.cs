@@ -1,33 +1,26 @@
-using System;
 using System.Linq;
 using BaconTime.Terminal.Extensions;
 using ConsoleTables.Core;
 using Countersoft.Gemini.Api;
 using Countersoft.Gemini.Commons.Entity;
-using Fclp.Internals.Extensions;
 using Format = ConsoleTables.Core.Format;
 
 namespace BaconTime.Terminal.Commands
 {
     [Command("show", "hours", "my")]
-    public class ShowLoggedHoursCommand : BaseCommand
+    public class ShowLoggedHoursCommand : ServiceManagerCommand
     {
-        private readonly ServiceManager svc;
-        private int take = 100;
-        private int workingHours;
-
-        public ShowLoggedHoursCommand(ServiceManager svc)
+        public ShowLoggedHoursCommand(ServiceManager svc) : base(svc)
         {
-            this.svc = svc;
         }
 
         public override void Execute(MainArgs args)
         {
-            var user = svc.Item.WhoAmI();
+            var user = Svc.Item.WhoAmI();
 
-            workingHours = args.Options.WorkingHours;
-            take = args.Options.Take;
-            var items = svc.Item
+            var workingHours = args.Options.WorkingHours;
+            var take = args.Options.Take;
+            var items = Svc.Item
                 .GetFilteredItems(new IssuesFilter
                 {
                     IncludeClosed = true,
@@ -54,7 +47,7 @@ namespace BaconTime.Terminal.Commands
                     x.Sum(m=>m.Time.Hours()),
                     workingHours- x.Sum(m=>m.Time.Hours())
                 })
-                .Take(take)
+                .Take(take).ToList()
                 .ForEach(x => table.AddRow(x));
 
             table.Write(Format.MarkDown);

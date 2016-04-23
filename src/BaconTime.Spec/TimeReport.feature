@@ -34,16 +34,27 @@ Scenario: show words for current user
 	And I execute log log 2h40m id deployment and testing
 	And I execute log log 1h id fixing an isue
 	And I execute log log 8h30m id --when 2015-01-31 fixing an issue
-	When I execute show show words 
+	When I execute show show words
 	Then message is shown
 	"""
-| word                         | percent |
-|------------------------------|---------|
-| hi                           | 26.0    |
-| mom                          | 24.0    |
-| system.collections.arraylist | 20.0    |
-| fixing                       | 12.0    |
-| testing                      | 10.0    |
+| word           | percent |
+|----------------|---------|
+| fixing         | 28.6    |
+| api            | 28.6    |
+| testing        | 28.6    |
+| issue          | 14.3    |
+| design         | 14.3    |
+	"""
+	When I execute show show words --stemmed
+	Then message is shown
+	"""
+| word      | percent |
+|-----------|---------|
+| test      | 42.9    |
+| fix       | 28.6    |
+| api       | 28.6    |
+| issu      | 14.3    |
+| design    | 14.3    |
 	"""
 
 Scenario: show all time

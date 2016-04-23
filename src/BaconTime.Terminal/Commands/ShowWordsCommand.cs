@@ -4,8 +4,7 @@ using System.Text.RegularExpressions;
 using ConsoleTables.Core;
 using Countersoft.Gemini.Api;
 using Countersoft.Gemini.Commons.Entity;
-using Fclp;
-using Fclp.Internals.Extensions;
+using Iveonik.Stemmers;
 using Format = ConsoleTables.Core.Format;
 
 namespace BaconTime.Terminal.Commands
@@ -13,13 +12,11 @@ namespace BaconTime.Terminal.Commands
     [Command("show", "words")]
     public class ShowWordsCommand : ServiceManagerCommand
     {
-        private int limit = 100;
-        private bool stemmed;
         public ShowWordsCommand(ServiceManager svc) : base(svc) { }
 
         private static string Trim(string e) => e.ToLower().Trim(',', ';', ':', '.', '-', '+', '\r', '\n');
 
-        private static string Stem(string e) => e;// new EnglishStemmer().Stem(new DanishStemmer().Stem(e));
+        private static Func<string, string> Stem(bool stemmed) => e => stemmed ? new EnglishStemmer().Stem(e) : e;
 
         private static bool Allowed(string e)
         {
@@ -31,6 +28,7 @@ namespace BaconTime.Terminal.Commands
 
         public override void Execute(MainArgs args)
         {
+            var take = args.Options.Take;
             var user = Svc.Item.WhoAmI();
             var items = Svc.Item.GetFilteredItems(new IssuesFilter
             {
@@ -42,7 +40,7 @@ namespace BaconTime.Terminal.Commands
                 e.Entity.Comment.Split(' ')
                     .Select(Clean)
                     .Select(Trim)
-                    .Select(Stem)
+                    .Select(Stem(args.Options.Stemmed))
                     .Where(Allowed)
                 )
                 .GroupBy(m => m)
@@ -57,8 +55,9 @@ namespace BaconTime.Terminal.Commands
                 {
                     x.Key,x.pct.ToString("F1")
                 })
-                .Take(limit).
-                ForEach(x => table.AddRow(x));
+                .Take(take)
+                .ToList()
+                .ForEach(x => table.AddRow(x));
 
             table.Write(Format.MarkDown);
         }
