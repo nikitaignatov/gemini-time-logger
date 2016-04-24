@@ -12,11 +12,9 @@ Usage:
     magictimes create ticket (<project> <state> <title>...) [--parent=<id>]
     magictimes show project all
     magictimes show logs
-    magictimes show logs project <id> [--from=<date>] [--to=<date>]
-    magictimes show logs ticket  <id> [my] [--from=<date>] [--to=<date>]
+    magictimes show logs (project | ticket) <id> [--from=<date>] [--to=<date>]
     magictimes show logs user <username> [--from=<date>]  [--to=<date>]
-    magictimes show ticket assigned
-    magictimes show ticket <id>
+    magictimes show ticket (assigned | <id>)
     magictimes show hours [by <user>] [--from=<date>]  [--to=<date>]  [--working-hours=<hours>]  
     magictimes show words [--stemmed] [--all]
 
@@ -27,6 +25,7 @@ Options:
     --from=<date>             The first inclussive date of the time period [default:today-30days]
     --to=<date>               The last inclussive date of the time period [default:today]
     --working-hours=<hours>   The number of working hours in a working day [default:8]
+    --stemmed                 Enables porter stemming of the words.
     ";
         private readonly IDictionary<string, ValueObject> args;
         public MainArgs(ICollection<string> argv, bool help = true, object version = null, bool optionsFirst = false, bool exit = false)
