@@ -20,9 +20,8 @@ namespace Gemini.Commander.Core
         public bool IncludeClosed => Args.Extract("--inculed-closed", false);
         public int LogType => Args.Extract("--log-type", 30);
         public int WorkingHours => Args.Extract("--working-hours", 8);
-        public DateTime When => Args.Extract("--when", DateTime.Now);
-        public DateTime From => DateTime.Today.AddDays(-30);
-        public DateTime To => DateTime.Today;
-
+        public DateTime When => Args.Extract("--when", DateTime.Now.ToUniversalTime());
+        public DateTime From => Args.Extract("--from", DateTime.Today.AddDays(-30));
+        public DateTime To => Args.Extract("--to", DateTime.Today.AddDays(1));
     }
 }

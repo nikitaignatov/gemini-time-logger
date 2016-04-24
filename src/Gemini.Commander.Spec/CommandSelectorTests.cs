@@ -11,15 +11,15 @@ namespace Gemini.Commander.Spec
     class CommandSelectorTests
     {
         [TestCase("log 1m30h 24242 hi mom", typeof(LogTimeCommand))]
-        [TestCase("show hours my", typeof(ShowLoggedHoursCommand))]
+        [TestCase("show hours", typeof(ShowHoursCommand))]
         public void should_select_correct_command(string text, Type type)
         {
-            var command = CommandRunner.LoadCommand(new MainArgs(text.Split(' ')).Args, new[] { typeof(LogTimeCommand), typeof(ShowLoggedHoursCommand), });
+            var command = CommandRunner.LoadCommand(new MainArgs(text.Split(' ')).Args, new[] { typeof(LogTimeCommand), typeof(ShowHoursCommand), });
             command.ShouldBeEquivalentTo(type);
         }
 
         [TestCase("log 1m30h 24242 hi mom", typeof(LogTimeCommand))]
-        [TestCase("show hours my", typeof(ShowLoggedHoursCommand))]
+        [TestCase("show hours", typeof(ShowHoursCommand))]
         public void should_throw_when_command_not_defined(string text, Type type)
         {
             Action result = () => CommandRunner.LoadCommand(new MainArgs(text.Split(' ')).Args, new[] { typeof(string) });

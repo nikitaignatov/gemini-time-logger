@@ -64,26 +64,37 @@ gemini show logs ticket 1024 my
 ```
 
 
-view all time log entries by you:
+View your hours by day. To view how many hours missing on the day ```--working-hours=10``` can be used to define working hours length for a day. The default is 8.
 
 ```bat
-gemini show hours my 
-
-// output:
-| user       | ticket               | date                | hours   | message           |
-|------------|----------------------|---------------------|---------|-------------------|
-```
-
-view your hours by day
-
-```bat
-gemini show hours my 
+gemini show hours 
 
 // output:
 | date          | hours         | missing hours |
 |---------------|---------------|---------------|
+| 2016-04-24    | 6,6           | 1,4           |
+| 2016-04-12    | 10            | -2            |
+| 2016-04-10    | 1,2           | 6,8           |
+| 2016-04-08    | 5             | 3             |
+| 2016-04-07    | 2,5           | 5,5           |
 ```
 
+view all tickets assigned to you
 
+```bat
+gemini show ticket assigned
+
+// output:
+| id     | ticket                                              |
+|--------|-----------------------------------------------------|
+| 36     | Multiple Currency Support                           |
+| 78     | Drillable Chart Regions: Wrong Url                  |
+| 88     | Support importing from DBF files!                   |
+| 70     | Campaign Approvals: Allow Majority Approvals        |
+| 189    | Upgrade RestSharp library to RTM                    |
+| 197    | Duplication of effort on Helpdesk                   |
+| 195    | Month End Accounting takes too long in regions      |
+| 176    | Nvarchar max required for comment fields            |
+```
 
 

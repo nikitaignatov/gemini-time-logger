@@ -11,12 +11,13 @@ Usage:
     magictimes log <time> <id> [--when=<date>] [--log-type=<type>] <message>... 
     magictimes create ticket (<project> <state> <title>...) [--parent=<id>]
     magictimes show project all
-    magictimes show logs my
+    magictimes show logs
     magictimes show logs project <id> [--from=<date>] [--to=<date>]
     magictimes show logs ticket  <id> [my] [--from=<date>] [--to=<date>]
     magictimes show logs user <username> [--from=<date>]  [--to=<date>]
+    magictimes show ticket assigned
     magictimes show ticket <id>
-    magictimes show hours my 
+    magictimes show hours
     magictimes show hours by <user> [--from=<date>]  [--to=<date>]  [--working-hours=<hours>]  
     magictimes show words [--stemmed] [--all]
 

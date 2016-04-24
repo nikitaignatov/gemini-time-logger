@@ -8,12 +8,10 @@ using Format = ConsoleTables.Core.Format;
 
 namespace Gemini.Commander.Commands
 {
-    [Command("show", "hours", "my")]
-    public class ShowLoggedHoursCommand : ServiceManagerCommand
+    [Command("show", "hours")]
+    public class ShowHoursCommand : ServiceManagerCommand
     {
-        public ShowLoggedHoursCommand(ServiceManager svc) : base(svc)
-        {
-        }
+        public ShowHoursCommand(ServiceManager svc) : base(svc) { }
 
         public override void Execute(MainArgs args)
         {
