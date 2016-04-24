@@ -1,7 +1,6 @@
 # gemini-time-logger
 
-
-Create a logger.bat file 
+A small cli for logging time with Gemini. This app allows you to create several predefined templates for time logging.
 
 ```bat
 Usage:
@@ -25,12 +24,7 @@ Options:
     --stemmed                 Enables porter stemming of the words.
 ```
 
-Create a ```.bat``` file with a path to your application.
-
-```bat
-@echo off
-"C:\tools\timelogger\BaconTime.terminal.exe" %*  
-```
+Build the projec, place it in your tools folder. 
 in app.config Replace the values with your credentials and the url to Gemini.
 
 ```xml
@@ -41,22 +35,35 @@ in app.config Replace the values with your credentials and the url to Gemini.
 </appSettings>
 ```
 
+Create a ```gemini.bat``` file with a path to where you places the exe.
+
+```bat
+@echo off
+"C:\tools\timelogger\Gemini.Commander.exe" %*  
+```
 
 Then you can log the time as in the example below
 
 ```bat
-logger log 1h10m 1024 "Hi mom"                 
-logger log 10h10m 512 Hi mom                             
-logger log 10m 16 work --when 2016-02-08 
-logger log 1h 32 "work"                  
-logger log 1h 256 work  --when 2010-04-16 
-logger log 10h 1024 "work very hard"       
+gemini create ticket 17 1 create time logger cli
+gemini log 2h 200 "review existing code"                 
+gemini log 3h15m 200 "define test cases and scenarios"                 
+gemini log 2h30m 200 "implementation"  --when 2016-04-07                  
+gemini log 1h 200 "qa / testing"                 
+gemini log 15m 200 "fixing bug"                 
+gemini log 10m 200 "deployment"                  
+gemini log 5h 200 uat testing  --when 2016-04-08                        
+gemini log 10m 200 work        --when 2016-04-10 
+gemini log 1h 200 "work"       --when 2016-04-10                  
+gemini log 1h 200 work         --when 2010-04-10
+gemini log 10h 200 "work very hard"  --when 2016-04-12 
+gemini show words      
 ```
 
 view time logged for a ticket:
 
 ```bat
-logger show -t 1024
+gemini show logs ticket 1024 my
 
 // output:
 | date       | hours   | message |
@@ -65,22 +72,36 @@ logger show -t 1024
 ```
 
 
-view all time log entries by you:
+View your hours by day. To view how many hours missing on the day ```--working-hours=10``` can be used to define working hours length for a day. The default is 8.
 
 ```bat
-logger show-all --my
+gemini show hours 
 
 // output:
-| user       | ticket               | date                | hours   | message           |
-|------------|----------------------|---------------------|---------|-------------------|
-| Peter Jens | Silly ticket         | 17-04-2016 23:00:00 | 1,2     | Worked very hard  |
-| Peter Jens | Silly ticket         | 17-04-2016 13:18:45 | 0,8     | hi                |
-| Peter Jens | Fix widescreen displ | 16-04-2016 09:39:24 | 5       | commit            |
-| Peter Jens | Support importing fr | 14-02-2011 16:30:40 | 0,0     |                   |
-| Peter Jens | Drillable Chart Regi | 19-05-2010 09:17:12 | 0,0     | Moe work commited |
-| Peter Jens | Webpart Zones: Custo | 30-04-2010 11:23:58 | 1       |                   |
-| Peter Jens | Multiple Currency Su | 30-04-2010 11:23:27 | 3       |                   |
-| Peter Jens | Multiple Currency Su | 30-04-2010 11:23:08 | 2       |                   |
+| date          | hours         | missing hours |
+|---------------|---------------|---------------|
+| 2016-04-24    | 6,6           | 1,4           |
+| 2016-04-12    | 10            | -2            |
+| 2016-04-10    | 1,2           | 6,8           |
+| 2016-04-08    | 5             | 3             |
+| 2016-04-07    | 2,5           | 5,5           |
 ```
 
+view all tickets assigned to you
+
+```bat
+gemini show ticket assigned
+
+// output:
+| id     | ticket                                              |
+|--------|-----------------------------------------------------|
+| 36     | Multiple Currency Support                           |
+| 78     | Drillable Chart Regions: Wrong Url                  |
+| 88     | Support importing from DBF files!                   |
+| 70     | Campaign Approvals: Allow Majority Approvals        |
+| 189    | Upgrade RestSharp library to RTM                    |
+| 197    | Duplication of effort on Helpdesk                   |
+| 195    | Month End Accounting takes too long in regions      |
+| 176    | Nvarchar max required for comment fields            |
+```
 
