@@ -38,18 +38,25 @@ Create a ```gemini.bat``` file with a path to where you places the exe.
 
 ```bat
 @echo off
-"C:\tools\timelogger\BaconTime.terminal.exe" %*  
+"C:\tools\timelogger\Gemini.Commander.exe" %*  
 ```
 
 Then you can log the time as in the example below
 
 ```bat
-gemini log 1h10m 1024 "Hi mom"                 
-gemini log 10h10m 512 Hi mom                             
-gemini log 10m 16 work --when 2016-02-08 
-gemini log 1h 32 "work"                  
-gemini log 1h 256 work  --when 2010-04-16 
-gemini log 10h 1024 "work very hard"       
+gemini create ticket 17 1 create time logger cli
+gemini log 2h 200 "review existing code"                 
+gemini log 3h15m 200 "define test cases and scenarios"                 
+gemini log 2h30m 200 "implementation"  --when 2016-04-07                  
+gemini log 1h 200 "qa / testing"                 
+gemini log 15m 200 "fixing bug"                 
+gemini log 10m 200 "deployment"                  
+gemini log 5h 200 uat testing  --when 2016-04-08                        
+gemini log 10m 200 work        --when 2016-04-10 
+gemini log 1h 200 "work"       --when 2016-04-10                  
+gemini log 1h 200 work         --when 2010-04-10
+gemini log 10h 200 "work very hard"  --when 2016-04-12 
+gemini show words      
 ```
 
 view time logged for a ticket:
