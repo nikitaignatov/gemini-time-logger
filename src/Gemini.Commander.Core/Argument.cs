@@ -20,6 +20,5 @@ namespace Gemini.Commander.Core
         public string Title => string.Join(" ", Args["<title>"]?.AsList?.ToArray());
         public int Hours => Args["<time>"].ToString().ConvertTo("h");
         public int Minutes => Args["<time>"].ToString().ConvertTo("m");
-        public bool My => Args["my"].IsTrue;
     }
 }
