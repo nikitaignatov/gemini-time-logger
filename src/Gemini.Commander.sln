@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gemini.Commander.Terminal", "Gemini.Commander\Gemini.Commander.Terminal.csproj", "{321FC229-CC5B-474C-AC88-0B478BC4D0DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gemini.Commander.Spec", "Gemini.Commander.Spec\Gemini.Commander.Spec.csproj", "{FBC32D03-1B8B-4469-BCBE-E9ABC68AB3DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gemini.Commander.Commands", "Gemini.Commander.Commands\Gemini.Commander.Commands.csproj", "{A4648E51-F2B5-4060-A38C-FC4A24AD4DDD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gemini.Commander.Core", "Gemini.Commander.Core\Gemini.Commander.Core.csproj", "{E03A4A02-D525-4BA7-A847-90EEA6D7D51C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gemini.Commander.Plugins", "Gemini.Commander.Plugins\Gemini.Commander.Plugins.csproj", "{9E5467D5-71FD-4121-A5DC-57C6477690E5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{321FC229-CC5B-474C-AC88-0B478BC4D0DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{321FC229-CC5B-474C-AC88-0B478BC4D0DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{321FC229-CC5B-474C-AC88-0B478BC4D0DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{321FC229-CC5B-474C-AC88-0B478BC4D0DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBC32D03-1B8B-4469-BCBE-E9ABC68AB3DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBC32D03-1B8B-4469-BCBE-E9ABC68AB3DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBC32D03-1B8B-4469-BCBE-E9ABC68AB3DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBC32D03-1B8B-4469-BCBE-E9ABC68AB3DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4648E51-F2B5-4060-A38C-FC4A24AD4DDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4648E51-F2B5-4060-A38C-FC4A24AD4DDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4648E51-F2B5-4060-A38C-FC4A24AD4DDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4648E51-F2B5-4060-A38C-FC4A24AD4DDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E03A4A02-D525-4BA7-A847-90EEA6D7D51C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E03A4A02-D525-4BA7-A847-90EEA6D7D51C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E03A4A02-D525-4BA7-A847-90EEA6D7D51C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E03A4A02-D525-4BA7-A847-90EEA6D7D51C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E5467D5-71FD-4121-A5DC-57C6477690E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E5467D5-71FD-4121-A5DC-57C6477690E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E5467D5-71FD-4121-A5DC-57C6477690E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E5467D5-71FD-4121-A5DC-57C6477690E5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
