@@ -63,7 +63,7 @@ Scenario: show all time
 	And I execute log log 1h10m id --when 2016-01-31 Hi mom 
 	And I execute log log 8h30m id --when 2015-01-31 Working Hard 
 	And I execute log log 8h30m id --when 2015-01-30 Working Hard 
-	When I execute show show hours my
+	When I execute show show hours
 	Then message is shown
 	"""
 | user         | id         | date       | hours   | message      |

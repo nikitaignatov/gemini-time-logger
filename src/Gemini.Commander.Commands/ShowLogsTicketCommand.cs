@@ -22,7 +22,7 @@ namespace Gemini.Commander.Commands
 
             times
                 .OrderByDescending(x => x.Entity.EntryDate)
-                .Where(x => !args.Arguments.My || x.Entity.UserId == user.Entity.Id)
+                .Where(x => x.Entity.UserId == user.Entity.Id)
                 .Take(take)
                 .Select(x => new
                 {

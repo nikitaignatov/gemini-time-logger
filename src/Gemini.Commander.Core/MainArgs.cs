@@ -16,7 +16,8 @@ Usage:
     magictimes show logs user <username> [--from=<date>]  [--to=<date>]
     magictimes show ticket (assigned | <id>)
     magictimes show hours [by <user>] [--from=<date>]  [--to=<date>]  [--working-hours=<hours>]  
-    magictimes show words [--stemmed] [--all]
+    magictimes show words (all | trend) [--stemmed]
+    magictimes show stats
 
 Options:
     -h --help                 Show this screen.

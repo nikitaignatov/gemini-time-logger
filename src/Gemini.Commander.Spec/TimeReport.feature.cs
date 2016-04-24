@@ -169,7 +169,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 65
  testRunner.And("I execute log log 8h30m id --when 2015-01-30 Working Hard", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 66
- testRunner.When("I execute show show hours my", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I execute show show hours", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 67
  testRunner.Then("message is shown", @"| user         | id         | date       | hours   | message      |
