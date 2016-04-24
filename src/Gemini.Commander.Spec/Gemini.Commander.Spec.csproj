@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandSelectorTests.cs" />
+    <Compile Include="OptionParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Steps\TimeReportStepDefinition.cs" />
     <Compile Include="TimeReport.feature.cs">
