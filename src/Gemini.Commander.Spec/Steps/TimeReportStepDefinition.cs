@@ -69,13 +69,13 @@ namespace Gemini.Commander.Spec.Steps
             var svc = ScenarioContext.Current.Get<ServiceManager>();
             var ticket = ScenarioContext.Current.Get<IssueDto>();
 
-            var entryDate = (date == "today" ? DateTime.Today : Convert.ToDateTime(date)).Date;
+            var entryDate = (date == "today" ? DateTime.Today : Convert.ToDateTime(date)).ToUniversalTime().Date;
 
             svc.Item.GetTimes(ticket.Id).Any().Should().BeTrue();
             var entry = svc.Item.GetTimes(ticket.Id).First().Entity;
             (entry.Minutes + (entry.Hours * 60)).ShouldBeEquivalentTo(total_minutes);
             entry.Comment.ShouldBeEquivalentTo(comment);
-            entry.EntryDate.Date.ShouldBeEquivalentTo(entryDate);
+            entry.EntryDate.ToUniversalTime().Date.ShouldBeEquivalentTo(entryDate);
         }
 
         [When(@"I execute show (.*)")]

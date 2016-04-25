@@ -132,16 +132,16 @@ this.ScenarioSetup(scenarioInfo);
 #line 35
  testRunner.And("I execute log log 1h id fixing an isue", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 36
- testRunner.And("I execute log log 8h30m id --when 2015-01-31 fixing an issue", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I execute log log 8h30m id --when 2016-04-10 fixing an issue", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 37
- testRunner.When("I execute show show words", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I execute show show words all", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 38
  testRunner.Then("message is shown", "| word           | percent |\r\n|----------------|---------|\r\n| fixing         | 28" +
                     ".6    |\r\n| api            | 28.6    |\r\n| testing        | 28.6    |\r\n| issue    " +
                     "      | 14.3    |\r\n| design         | 14.3    |", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 48
- testRunner.When("I execute show show words --stemmed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I execute show show words all --stemmed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 49
  testRunner.Then("message is shown", "| word      | percent |\r\n|-----------|---------|\r\n| test      | 42.9    |\r\n| fix " +

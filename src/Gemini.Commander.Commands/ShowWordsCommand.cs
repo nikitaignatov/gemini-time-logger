@@ -35,7 +35,7 @@ namespace Gemini.Commander.Commands
         {
             var take = args.Options.Take;
             var user = Svc.Item.WhoAmI();
-            var items = Svc.LogsByUser(user);
+            var items = Svc.LogsByUser(user, args);
 
             var words = items.SelectMany(e => EntryToWords(args, e))
                 .GroupBy(m => m)

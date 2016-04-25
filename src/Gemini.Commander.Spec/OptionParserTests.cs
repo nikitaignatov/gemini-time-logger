@@ -26,19 +26,19 @@ namespace Gemini.Commander.Spec
         [TestCase("log 1h 10 testing")]
         public void should_parse_when_option_default(string text)
         {
-            new MainArgs(text.Split(' ')).Options.When.Date.ShouldBeEquivalentTo(DateTime.Today);
+            new MainArgs(text.Split(' ')).Options.When.Date.ShouldBeEquivalentTo(DateTime.Today.ToUniversalTime().Date);
         }
 
-        [TestCase("show hours --working-hours 10", 10)]
-        [TestCase("show hours --working-hours 0", 0)]
-        [TestCase("show hours", 8)]
+        [TestCase("show hours all --working-hours 10", 10)]
+        [TestCase("show hours all --working-hours 0", 0)]
+        [TestCase("show hours all", 8)]
         public void should_parse_working_hours_option(string text, int expected)
         {
             new MainArgs(text.Split(' ')).Options.WorkingHours.ShouldBeEquivalentTo(expected);
         }
 
-        [TestCase("show words --stemmed", true)]
-        [TestCase("show words", false)]
+        [TestCase("show words all --stemmed", true)]
+        [TestCase("show words all", false)]
         public void should_parse_stemmed_option(string text, bool expected)
         {
             new MainArgs(text.Split(' ')).Options.Stemmed.ShouldBeEquivalentTo(expected);

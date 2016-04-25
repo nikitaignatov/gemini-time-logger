@@ -23,14 +23,18 @@ namespace Gemini.Commander.Core.Extensions
 
 
 
-        public static IList<IssueTimeTrackingDto> LogsByUser(this ServiceManager svc, UserDto user)
+        public static IList<IssueTimeTrackingDto> LogsByUser(this ServiceManager svc, UserDto user, MainArgs args)
         {
             return svc.Item.GetFilteredItems(new IssuesFilter
             {
                 IncludeClosed = true,
-                TimeLoggedBy = user.Entity.Id + ""
+                TimeLoggedBy = user.Entity.Id + "",
+                TimeLoggedAfter = args.Options.From.ToString("yyyy-MM-dd"),
+                TimeLoggedBefore = args.Options.To.ToString("yyyy-MM-dd")
             })
             .SelectMany(x => x.TimeEntries.Where(e => e.Entity.UserId == user.Entity.Id))
+            .Where(x => x.Entity.EntryDate >= args.Options.From)
+            .Where(x => x.Entity.EntryDate <= args.Options.To)
             .ToList();
         }
     }

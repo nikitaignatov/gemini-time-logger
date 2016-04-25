@@ -33,8 +33,8 @@ Scenario: show words for current user
 	And I execute log log 3h10m id refactoring
 	And I execute log log 2h40m id deployment and testing
 	And I execute log log 1h id fixing an isue
-	And I execute log log 8h30m id --when 2015-01-31 fixing an issue
-	When I execute show show words
+	And I execute log log 8h30m id --when 2016-04-10 fixing an issue
+	When I execute show show words all
 	Then message is shown
 	"""
 | word           | percent |
@@ -45,7 +45,7 @@ Scenario: show words for current user
 | issue          | 14.3    |
 | design         | 14.3    |
 	"""
-	When I execute show show words --stemmed
+	When I execute show show words all --stemmed
 	Then message is shown
 	"""
 | word      | percent |

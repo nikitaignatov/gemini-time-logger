@@ -21,7 +21,7 @@ namespace Gemini.Commander.Commands
         {
             var take = args.Options.Take;
             var user = Svc.Item.WhoAmI();
-            var items = Svc.LogsByUser(user);
+            var items = Svc.LogsByUser(user, args);
 
             var dict = new Dictionary<string, IEnumerable<double>>
             {
