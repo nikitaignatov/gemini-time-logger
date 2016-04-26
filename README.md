@@ -4,15 +4,16 @@ A small cli for logging time with Gemini. This app allows you to create several 
 
 ```bat
 Usage:
-    magictimes log <time> <id> [--when=<date>] [--log-type=<type>] <message>... 
-    magictimes create ticket (<project> <state> <title>...) [--parent=<id>]
-    magictimes show project all
-    magictimes show logs
-    magictimes show logs (project | ticket) <id> [--from=<date>] [--to=<date>]
-    magictimes show logs user <username> [--from=<date>]  [--to=<date>]
-    magictimes show ticket (assigned | <id>)
-    magictimes show hours [by <user>] [--from=<date>]  [--to=<date>]  [--working-hours=<hours>]  
-    magictimes show words [--stemmed] [--all]
+    gemini log <time> <id> [--when=<date>] [--log-type=<type>] <message>... 
+    gemini create ticket (<project> <state> <title>...) [--parent=<id>]
+    gemini show project all
+    gemini show logs
+    gemini show logs (project | ticket) <id> [--from=<date>] [--to=<date>]
+    gemini show logs user <username> [--from=<date>]  [--to=<date>]
+    gemini show ticket (assigned | <id>)
+    gemini show hours [by <user>] [--from=<date>] [--to=<date>] [--working-hours=<hours>]  
+    gemini show words (all | trend) [--stemmed] [--from=<date>] [--to=<date>] [--user=<id>]
+    gemini show stats [--from=<date>] [--to=<date>] [--user=<id>]
 
 Options:
     -h --help                 Show this screen.

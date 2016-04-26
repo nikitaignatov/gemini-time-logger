@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ConsoleTables.Core;
 using Countersoft.Gemini.Api;
 using Countersoft.Gemini.Commons.Dto;
-using Countersoft.Gemini.Commons.Entity;
 using Gemini.Commander.Core;
 using Gemini.Commander.Core.Extensions;
 using Iveonik.Stemmers;
+using Newtonsoft.Json;
 using Format = ConsoleTables.Core.Format;
 
 namespace Gemini.Commander.Commands
@@ -36,7 +37,7 @@ namespace Gemini.Commander.Commands
             var take = args.Options.Take;
             var user = Svc.Item.WhoAmI();
             var items = Svc.LogsByUser(user, args);
-
+            
             var words = items.SelectMany(e => EntryToWords(args, e))
                 .GroupBy(m => m)
                 .OrderByDescending(m => m.Count())
@@ -59,7 +60,7 @@ namespace Gemini.Commander.Commands
 
         public static IEnumerable<string> EntryToWords(MainArgs args, IssueTimeTrackingDto e)
         {
-            return e.Entity.Comment.Split(' ')
+            return e.Words()
                 .Select(Clean)
                 .Select(Trim)
                 .Select(Stem(args.Options.Stemmed))

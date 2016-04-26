@@ -16,6 +16,7 @@ namespace Gemini.Commander.Core
 
         public int Take => Args.Extract("--take", 25);
         public int? Parent => Args.Extract("--parent", -1) == -1 ? null : (int?)Args.Extract("--parent", -1);
+        public int? User => Args.Extract("--user", -1) == -1 ? null : (int?)Args.Extract("--user", -1);
         public bool Stemmed => Args.Extract("--stemmed", false);
         public bool IncludeClosed => Args.Extract("--incule-closed", false);
         public int LogType => Args.Extract("--log-type", 30);

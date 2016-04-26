@@ -20,12 +20,7 @@ namespace Gemini.Commander
         {
             container = new Container();
             container.Register(LoadService);
-
-            var pluginsDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins");
-
-            if (Directory.Exists(pluginsDir))
-                Directory.GetFiles(pluginsDir, "*.dll").ToList().Select(Assembly.LoadFrom).ToList();
-
+            
             Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll").Select(Assembly.LoadFrom).ToList();
 
             var cmd = AppDomain.CurrentDomain
