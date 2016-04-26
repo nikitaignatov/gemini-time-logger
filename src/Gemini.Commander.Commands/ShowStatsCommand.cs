@@ -13,9 +13,7 @@ namespace Gemini.Commander.Commands
     [Command("show", "stats")]
     public class ShowStatsCommand : ServiceManagerCommand
     {
-        public ShowStatsCommand(ServiceManager svc) : base(svc)
-        {
-        }
+        public ShowStatsCommand(ServiceManager svc) : base(svc) { }
 
         public override void Execute(MainArgs args)
         {
@@ -26,17 +24,17 @@ namespace Gemini.Commander.Commands
             var dict = new Dictionary<string, IEnumerable<double>>
             {
                 {"entry_creation_spread     (days)", items.Select(x => (x.Entity.Created - x.Entity.EntryDate).TotalDays).ToList()},
-                {"hours_pr_day              (hours)", items.GroupBy(x=>x.Entity.EntryDate.Date).Select(x => x.Hours()).Select(Convert.ToDouble).ToList()},
-                {"entries_pr_day            (hours)", items.GroupBy(x=>x.Entity.EntryDate.Date).Select(x => x.Count()).Select(Convert.ToDouble).ToList()},
-                {"projects_pr_day           (hours)", items.GroupBy(x=>x.Entity.EntryDate.Date).Select(x => x.Select(e=>e.Entity.ProjectId).Distinct().Count()).Select(Convert.ToDouble).ToList()},
-                {"time_logging_day          (day of month)", items.GroupBy(x=>x.Entity.Created.Date.Day).OrderByDescending(x=>x.Count()).Select(x => x.Key).Select(Convert.ToDouble).ToList()},
-                {"time_logging_time         (hour of day)", items.GroupBy(x=>x.Entity.Created.Hour).OrderByDescending(x=>x.Count()).Select(x => x.Key).Select(Convert.ToDouble).ToList()},
-                {"overtime_by               (hours)", items.GroupBy(x=>x.Entity.EntryDate.Date).Select(x =>Math.Max(0, x.Hours()-8)).Select(Convert.ToDouble).ToList()},
-                {"short_days_by             (hours)", items.GroupBy(x=>x.Entity.EntryDate.Date).Select(x =>Math.Abs(Math.Min(0, x.Hours()-8))).Select(Convert.ToDouble).ToList()},
-                {"hours_pr_entry            (hours)", items.Select(x =>x.Hours()).Select(Convert.ToDouble).ToList()},
+                {"hours_pr_day              (hours)", items.GroupByEntryDate().Select(x => x.Hours()).ToDouble()},
+                {"entries_pr_day            (hours)", items.GroupByEntryDate().Select(x => x.Count()).ToDouble()},
+                {"projects_pr_day           (hours)", items.GroupByEntryDate().Select(x => x.Select(e=>e.ProjectId).Distinct().Count()).ToDouble()},
+                {"time_logging_day          (day of month)", items.GroupBy(x=>x.Entity.Created.Date.Day).OrderByDescending(x=>x.Count()).Select(x => x.Key).ToDouble()},
+                {"time_logging_time         (hour of day)", items.GroupBy(x=>x.Entity.Created.Hour).OrderByDescending(x=>x.Count()).Select(x => x.Key).ToDouble()},
+                {"overtime_by               (hours)", items.GroupByEntryDate().Select(x =>Math.Max(0, x.Hours()-8)).ToDouble()},
+                {"short_days_by             (hours)", items.GroupByEntryDate().Select(x =>Math.Abs(Math.Min(0, x.Hours()-8))).ToDouble()},
+                {"hours_pr_entry            (hours)", items.Select(x =>x.Hours()).ToDouble()},
             };
 
-            var table = new ConsoleTable("stat", "min", "max", "median", "mean", "lc", "uc");
+            var table = new ConsoleTable("stat", "min", "max", "median", "mean", "lower q", "upper q", "90th q");
 
             dict
                 .Select(x => new object[]
@@ -48,6 +46,7 @@ namespace Gemini.Commander.Commands
                     x.Value.Mean().Round(),
                     x.Value.LowerQuartile().Round(),
                     x.Value.UpperQuartile().Round(),
+                    x.Value.Percentile(90).Round(),
                 })
                 .Take(take)
                 .ToList()

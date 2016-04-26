@@ -19,5 +19,11 @@ namespace Gemini.Commander.Core.Extensions
         public static int Minutes(this IEnumerable<IssueTimeTracking> times) => times.Select(Minutes).Sum();
 
         public static string Shorten(this string input, int length) => string.Join("", input.Take(length));
+
+        public static IEnumerable<IGrouping<DateTime, IssueTimeTracking>> GroupByEntryDate(this IEnumerable<IssueTimeTrackingDto> times) => times.Select(x => x.Entity).GroupByEntryDate();
+        public static IEnumerable<IGrouping<DateTime, IssueTimeTracking>> GroupByEntryDate(this IEnumerable<IssueTimeTracking> times) => times.GroupBy(x => x.EntryDate.Date);
+        public static IEnumerable<double> ToDouble(this IEnumerable<int> times) => times.Select(Convert.ToDouble);
+        public static IEnumerable<double> ToDouble(this IEnumerable<float> times) => times.Select(Convert.ToDouble);
+        public static IEnumerable<double> ToDouble(this IEnumerable<decimal> times) => times.Select(Convert.ToDouble);
     }
 }
