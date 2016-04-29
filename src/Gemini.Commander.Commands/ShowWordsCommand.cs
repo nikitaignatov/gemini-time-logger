@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ConsoleTables.Core;
 using Countersoft.Gemini.Api;
-using Countersoft.Gemini.Commons.Dto;
 using Gemini.Commander.Core;
 using Gemini.Commander.Core.Extensions;
 using Iveonik.Stemmers;
@@ -41,7 +39,6 @@ namespace Gemini.Commander.Commands
                 .Select(Trim)
                 .Select(Stem(args.Options.Stemmed))
                 .Where(Allowed)
-                .Distinct()
                 .GroupBy(m => m)
                 .OrderByDescending(m => m.Count())
                 .Select(m => new { m.Key, pct = (m.Count() * 100m / items.Count()) })
