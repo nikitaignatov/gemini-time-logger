@@ -11,6 +11,7 @@ namespace Gemini.Commander.Core.Extensions
 {
     public static class Ext
     {
+        public static decimal Round(this decimal value, int decimals = 1) => Math.Round(value, 1);
         public static double Round(this double value, int decimals = 1) => Math.Round(value, 1);
         public static T Extract<T>(this IDictionary<string, ValueObject> args, string key, T defaultValue) => args.ContainsKey(key) && args[key]?.Value != null ? (T)Convert.ChangeType(args[key]?.Value?.ToString(), typeof(T)) : defaultValue;
         public static int ConvertTo(this string hours, string tag)
@@ -20,8 +21,6 @@ namespace Gemini.Commander.Core.Extensions
             var value = Regex.Match(hours, pattern, RegexOptions.IgnoreCase).Groups["c"]?.Value;
             return Convert.ToInt32(value ?? "0");
         }
-
-
 
         public static IList<IssueTimeTrackingDto> LogsByUser(this ServiceManager svc, UserDto user, MainArgs args)
         {
@@ -33,6 +32,20 @@ namespace Gemini.Commander.Core.Extensions
                 TimeLoggedBefore = args.Options.To.ToString("yyyy-MM-dd")
             })
             .SelectMany(x => x.TimeEntries.Where(e => e.Entity.UserId == user.Entity.Id))
+            .Where(x => x.Entity.EntryDate >= args.Options.From)
+            .Where(x => x.Entity.EntryDate <= args.Options.To)
+            .ToList();
+        }
+
+        public static IList<IssueTimeTrackingDto> LogsByEveryone(this ServiceManager svc, MainArgs args)
+        {
+            return svc.Item.GetFilteredItems(new IssuesFilter
+            {
+                IncludeClosed = true,
+                TimeLoggedAfter = args.Options.From.ToString("yyyy-MM-dd"),
+                TimeLoggedBefore = args.Options.To.ToString("yyyy-MM-dd")
+            })
+            .SelectMany(x => x.TimeEntries)
             .Where(x => x.Entity.EntryDate >= args.Options.From)
             .Where(x => x.Entity.EntryDate <= args.Options.To)
             .ToList();

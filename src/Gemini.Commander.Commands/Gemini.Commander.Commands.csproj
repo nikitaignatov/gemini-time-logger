@@ -86,6 +86,7 @@
     <Compile Include="ShowStatsCommand.cs" />
     <Compile Include="ShowTicketAssignedCommand.cs" />
     <Compile Include="ShowProjectCommand.cs" />
+    <Compile Include="ShowWordsEveryoneCommand.cs" />
     <Compile Include="ShowWordsCommand.cs" />
   </ItemGroup>
   <ItemGroup>

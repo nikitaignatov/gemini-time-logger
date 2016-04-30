@@ -7,6 +7,7 @@ using Countersoft.Gemini.Api;
 using Gemini.Commander.Core;
 using Gemini.Commander.Core.Extensions;
 using Iveonik.Stemmers;
+using Newtonsoft.Json;
 using Format = ConsoleTables.Core.Format;
 
 namespace Gemini.Commander.Commands
@@ -54,6 +55,8 @@ namespace Gemini.Commander.Commands
                 .Take(take)
                 .ToList()
                 .ForEach(x => table.AddRow(x));
+
+            Console.WriteLine(JsonConvert.SerializeObject(words));
 
             table.Write(Format.MarkDown);
         }

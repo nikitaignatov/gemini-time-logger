@@ -15,7 +15,7 @@ Usage:
     gemini show logs user <username> [--from=<date>]  [--to=<date>]
     gemini show ticket (assigned | <id>)
     gemini show hours [by <user>] [--from=<date>] [--to=<date>] [--working-hours=<hours>]  
-    gemini show words (all | trend) [--stemmed] [--from=<date>] [--to=<date>] [--user=<id>]
+    gemini show words (all | trend | everyone) [--stemmed] [--from=<date>] [--to=<date>] [--user=<id>] [--take=<number>]
     gemini show stats [--from=<date>] [--to=<date>] [--user=<id>]
 
 Options:
