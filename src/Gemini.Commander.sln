@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gemini.Commander.Terminal", "Gemini.Commander\Gemini.Commander.Terminal.csproj", "{321FC229-CC5B-474C-AC88-0B478BC4D0DC}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gemini.Commander.Core", "Gemini.Commander.Core\Gemini.Commander.Core.csproj", "{E03A4A02-D525-4BA7-A847-90EEA6D7D51C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gemini.Commander.Plugins", "Gemini.Commander.Plugins\Gemini.Commander.Plugins.csproj", "{9E5467D5-71FD-4121-A5DC-57C6477690E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gemini.Commander.Api", "Gemini.Commander.Api\Gemini.Commander.Api.csproj", "{BF53FC64-828C-458D-920D-5B99B9377583}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{9E5467D5-71FD-4121-A5DC-57C6477690E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E5467D5-71FD-4121-A5DC-57C6477690E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E5467D5-71FD-4121-A5DC-57C6477690E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF53FC64-828C-458D-920D-5B99B9377583}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF53FC64-828C-458D-920D-5B99B9377583}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF53FC64-828C-458D-920D-5B99B9377583}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF53FC64-828C-458D-920D-5B99B9377583}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,33 +1,17 @@
-using System;
-using System.Configuration;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Countersoft.Gemini.Api;
 using Gemini.Commander.Core;
 using Gemini.Commander.Core.Extensions;
-using Iveonik.Stemmers;
-using Newtonsoft.Json;
+using static Gemini.Commander.Core.Extensions.Ext;
 
 namespace Gemini.Commander.Commands
 {
-    [Command("show", "words", "everyone")]
-    public class ShowWordsEveryoneCommand : ServiceManagerCommand
+    public class ShowWordsEveryoneQuery : ServiceManagerQuery<IEnumerable<Data>>
     {
-        public ShowWordsEveryoneCommand(ServiceManager svc) : base(svc) { }
+        public ShowWordsEveryoneQuery(ServiceManager svc) : base(svc) { }
 
-        public static string Trim(string e) => e.ToLower().Trim(',', ';', ':', '.', '-', '+', '\r', '\n', '?', '!');
-
-        public static Func<string, string> Stem(bool stemmed) => e => stemmed ? new EnglishStemmer().Stem(e) : e;
-
-        public static bool Allowed(string e)
-        {
-            var stopwords = (ConfigurationManager.AppSettings["stopwords"] ?? "").Split(' ');
-            return !stopwords.Contains(e) && !string.IsNullOrWhiteSpace(e) && e.Length > 1;
-        }
-
-        public static string Clean(string e) => Regex.Replace(e, @"\s+", " ");
-
-        public override void Execute(MainArgs args)
+        public override IEnumerable<Data> Execute(MainArgs args)
         {
             var take = args.Options.Take;
             var items = Svc.LogsByEveryone(args);
@@ -38,23 +22,23 @@ namespace Gemini.Commander.Commands
                 words = Dump(args, x).ToDictionary(d => d.Word, d => new { d.Percent, d.Count })
             }).ToDictionary(x => x.user, x => x.words);
 
-            foreach (var word in words)
-            {
-                var labels = word.Value.OrderByDescending(x => x.Value.Percent).Take(6);
-                var data = new
+            return words
+                .Select(word => new { word, labels = word.Value.OrderByDescending(x => x.Value.Percent).Take(take) })
+                .Select(item => new Data
                 {
-                    labels = labels.Select(x => x.Key),
-                    datasets = new
+                    Labels = item.labels.Select(x => x.Key),
+                    Datasets = new[]
                     {
-                        label = word.Key,
-                        data = labels.Select(x => x.Value.Percent.Round())
+                        new Dataset
+                        {
+                            Label = item.word.Key,
+                            Data = item.labels.Select(x => x.Value.Percent.Round())
+                        }
                     }
-                };
-                Console.WriteLine(JsonConvert.SerializeObject(data));
-            }
+                });
         }
 
-        private static System.Collections.Generic.List<Item> Dump(MainArgs args, IGrouping<string, Countersoft.Gemini.Commons.Dto.IssueTimeTrackingDto> x)
+        private static IEnumerable<Item> Dump(MainArgs args, IGrouping<string, Countersoft.Gemini.Commons.Dto.IssueTimeTrackingDto> x)
         {
             return x.AllWords()
                     .Select(Clean)
@@ -73,5 +57,17 @@ namespace Gemini.Commander.Commands
         public string Word { get; set; }
         public decimal Percent { get; set; }
         public int Count { get; set; }
+    }
+
+    public class Dataset
+    {
+        public string Label { get; set; }
+        public IEnumerable<decimal> Data { get; set; }
+    }
+
+    public class Data
+    {
+        public IEnumerable<string> Labels { get; set; }
+        public IEnumerable<Dataset> Datasets { get; set; }
     }
 }

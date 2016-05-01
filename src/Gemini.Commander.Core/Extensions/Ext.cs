@@ -1,11 +1,13 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Text.RegularExpressions;
 using Countersoft.Gemini.Api;
 using Countersoft.Gemini.Commons.Dto;
 using Countersoft.Gemini.Commons.Entity;
 using DocoptNet;
+using Iveonik.Stemmers;
 
 namespace Gemini.Commander.Core.Extensions
 {
@@ -50,5 +52,18 @@ namespace Gemini.Commander.Core.Extensions
             .Where(x => x.Entity.EntryDate <= args.Options.To)
             .ToList();
         }
+
+
+        public static string Trim(string e) => e.ToLower().Trim(',', ';', ':', '.', '-', '+', '\r', '\n', '?', '!');
+
+        public static Func<string, string> Stem(bool stemmed) => e => stemmed ? new EnglishStemmer().Stem(e) : e;
+
+        public static bool Allowed(string e)
+        {
+            var stopwords = (ConfigurationManager.AppSettings["stopwords"] ?? "").Split(' ');
+            return !Enumerable.Contains(stopwords, e) && !String.IsNullOrWhiteSpace(e) && e.Length > 1;
+        }
+
+        public static string Clean(string e) => Regex.Replace(e, @"\s+", " ");
     }
 }

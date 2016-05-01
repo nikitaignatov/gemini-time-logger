@@ -4,4 +4,9 @@ namespace Gemini.Commander.Core
     {
         void Execute(MainArgs args);
     }
+
+    public interface IQuery<out TResult>
+    {
+        TResult Execute(MainArgs args);
+    }
 }
