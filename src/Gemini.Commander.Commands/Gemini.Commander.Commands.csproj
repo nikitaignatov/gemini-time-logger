@@ -47,6 +47,9 @@
       <HintPath>..\packages\docopt.net.0.6.1.6\lib\net40\DocoptNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Flagger">
+      <HintPath>..\lib\Flagger.dll</HintPath>
+    </Reference>
     <Reference Include="MathNet.Numerics, Version=3.11.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MathNet.Numerics.3.11.1\lib\net40\MathNet.Numerics.dll</HintPath>
       <Private>True</Private>
@@ -79,13 +82,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CreateTicketCommand.cs" />
+    <Compile Include="Flags\Flags.cs" />
     <Compile Include="LogTimeCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rules\Rules.cs" />
     <Compile Include="ShowHoursCommand.cs" />
     <Compile Include="ShowLogsTicketCommand.cs" />
     <Compile Include="ShowStatsCommand.cs" />
     <Compile Include="ShowTicketAssignedCommand.cs" />
     <Compile Include="ShowProjectCommand.cs" />
+    <Compile Include="ShowProfileQuery.cs" />
     <Compile Include="ShowWordsEveryoneCommand.cs" />
     <Compile Include="ShowWordsCommand.cs" />
   </ItemGroup>

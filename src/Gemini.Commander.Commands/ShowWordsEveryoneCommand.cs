@@ -57,6 +57,7 @@ namespace Gemini.Commander.Commands
         public string Word { get; set; }
         public decimal Percent { get; set; }
         public int Count { get; set; }
+        public decimal Hours { get; set; }
     }
 
     public class Dataset

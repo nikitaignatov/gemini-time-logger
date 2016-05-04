@@ -22,7 +22,7 @@ namespace Gemini.Commander.Core.Extensions
         public static IEnumerable<string> Words(this IssueTimeTrackingDto time) => time.Entity.Words();
         public static IEnumerable<string> AllWords(this IEnumerable<IssueTimeTrackingDto> times) => times.SelectMany(Words);
         public static IEnumerable<string> AllWords(this IEnumerable<IssueTimeTracking> times) => times.SelectMany(Words);
-
+        
         public static string Shorten(this string input, int length) => string.Join("", input.Take(length));
 
         public static IEnumerable<IGrouping<DateTime, IssueTimeTracking>> GroupByEntryDate(this IEnumerable<IssueTimeTrackingDto> times) => times.Select(x => x.Entity).GroupByEntryDate();

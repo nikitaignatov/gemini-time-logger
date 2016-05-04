@@ -1,11 +1,8 @@
-using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 using ConsoleTables.Core;
 using Countersoft.Gemini.Api;
 using Gemini.Commander.Core;
 using Gemini.Commander.Core.Extensions;
-using Newtonsoft.Json;
 using Format = ConsoleTables.Core.Format;
 using static Gemini.Commander.Core.Extensions.Ext;
 
@@ -42,9 +39,7 @@ namespace Gemini.Commander.Commands
                 .Take(take)
                 .ToList()
                 .ForEach(x => table.AddRow(x));
-
-            Console.WriteLine(JsonConvert.SerializeObject(words));
-
+            
             table.Write(Format.MarkDown);
         }
     }

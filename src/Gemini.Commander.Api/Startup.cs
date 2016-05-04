@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using AttributeRouting.Web.Http.SelfHost;
+using Newtonsoft.Json;
 using Owin;
 
 namespace Gemini.Commander.Api
@@ -18,6 +19,10 @@ namespace Gemini.Commander.Api
             // Configure Web API for self-host. 
             HttpConfiguration config = new HttpConfiguration();
             config.MapHttpAttributeRoutes();
+            config.Formatters.JsonFormatter.SerializerSettings=new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented
+            };
             appBuilder.UseWebApi(config);
         }
     }

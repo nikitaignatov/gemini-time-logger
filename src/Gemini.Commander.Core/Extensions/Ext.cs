@@ -24,6 +24,8 @@ namespace Gemini.Commander.Core.Extensions
             return Convert.ToInt32(value ?? "0");
         }
 
+        public static T Id<T>(T x) => x;
+
         public static IList<IssueTimeTrackingDto> LogsByUser(this ServiceManager svc, UserDto user, MainArgs args)
         {
             return svc.Item.GetFilteredItems(new IssuesFilter
@@ -65,5 +67,9 @@ namespace Gemini.Commander.Core.Extensions
         }
 
         public static string Clean(string e) => Regex.Replace(e, @"\s+", " ");
+        public static IEnumerable<string> Normalized(this IEnumerable<string> e) => e.Select(Clean).Select(Trim).Select(Stem(false)).Where(Allowed);
+
+        public static bool Between(this decimal value, decimal min, decimal max) => (value >= min && value <= max);
+
     }
 }

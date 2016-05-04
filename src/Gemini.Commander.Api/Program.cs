@@ -32,9 +32,9 @@ namespace Gemini.Commander.Api
     {
         [Route("api/show/words")]
         [HttpGet]
-        public IEnumerable<Data> Words()
+        public dynamic Words()
         {
-            return new ShowWordsEveryoneQuery(LoadService()).Execute(new MainArgs(new string[] { "show", "words", "everyone", "--take=10" }));
+            return new ShowProfileQuery(LoadService()).Execute(new MainArgs(new string[] { "show", "words", "everyone", "--take=10" , "--stemmed" }));
         }
 
         [Route("api/show/hours/{user}")]
