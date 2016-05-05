@@ -32,9 +32,16 @@ namespace Gemini.Commander.Commands
 
         public override dynamic Execute(MainArgs args)
         {
-            //var items = Svc.LogsByEveryone(args);
-            var items = JsonConvert.DeserializeObject<List<IssueTimeTrackingDto>>(File.ReadAllText("C:\\temp\\dump_times.json"))
-                                    .Where(x => x.Entity.EntryDate > DateTime.Today.AddDays(-200)).GroupBy(x => x.Fullname).Select(x => new { id = x.Key, doc = string.Join(" ", x.Select(m => m.Entity.Comment)) });
+            //var items = Svc.LogsByEveryone(args)
+            var items = JsonConvert.DeserializeObject<IEnumerable<IssueTimeTrackingDto>>(File.ReadAllText("c:\\temp\\dump_times.json"))
+                        .Where(x => x.Entity.EntryDate > DateTime.Today.AddDays(-200))
+                        .GroupBy(x => x.Fullname)
+                        .Select(x => new
+                        {
+                            id = x.Key,
+                            doc = string.Join(" ", x.Select(m => m.Entity.Comment))
+                        });
+
             var documents = items
                 .Select(x => new { x.id, doc = Tokenize(x.doc) })
                 .ToList();
@@ -59,12 +66,23 @@ namespace Gemini.Commander.Commands
                 idf = Math.Log(documents.Count() / (double)documents.Count(d => d.doc.ContainsKey(x)))
             });
 
-            var weighted = documents.Select(x => new { x.id, doc = x.doc.ToDictionary(m => m.Key, m => Math.Log(1 + m.Value) * df[m.Key].idf) });
+            var weighted = documents.Select(x => new
+            {
+                x.id,
+                doc = x.doc.ToDictionary(m => m.Key, m => Math.Log(1 + m.Value) * df[m.Key].idf)
+            })
+            .Select(x => new { x.id, x.doc, sumsq = x.doc.Values.SqrtSumSquares() })
+            .Select(x => new
+            {
+                x.id,
+                x.doc,
+                l2norm = x.doc.ToDictionary(d => d.Key, d => d.Value / x.sumsq)
+            });
 
             Console.SetBufferSize(100, 30000);
 
             Console.WriteLine(JsonConvert.SerializeObject(tf.OrderByDescending(x => x.Value.n).Take(10).Select(x => new { x.Key, entries = x.Value }), Formatting.Indented));
-            //Console.WriteLine(JsonConvert.SerializeObject(weighted.ToList().Take(5), Formatting.Indented));
+            //  Console.WriteLine(JsonConvert.SerializeObject(weighted.ToList().Take(5), Formatting.Indented));
 
             var profiles = typeof(DevOpsFlag).Assembly.ExportedTypes
                   .Where(x => x.IsSubclassOf(typeof(ProfileFlag)))
@@ -74,15 +92,14 @@ namespace Gemini.Commander.Commands
 
             foreach (var profile in profiles)
             {
-                var query = profile.profile.Profile;// "testing merge deploy implement review investigate fix commit design spec";
+                var query = profile.profile.Profile;
                 var tokens = Tokenize(query);
 
                 var result = weighted
-                    .Select(x => new { profile.profile.Description, score = tokens.Sum(t => x.doc.ContainsKey(t.Key) ? x.doc[t.Key] : 0), x.id })
+                    .Select(x => new { profile.profile.Description, score = tokens.Sum(t => x.doc.ContainsKey(t.Key) ? x.l2norm[t.Key] : 0), x.id })
                     .OrderByDescending(x => x.score)
-                    .Where(x=>x.score>1)
                     .GroupBy(x => x.Description)
-                    .ToDictionary(x => x.Key, x => x.Select(m => new { m.id, score= m.score.Round() }));
+                    .ToDictionary(x => x.Key, x => x.Select(m => new { m.id, score = m.score.Round(3) }));
 
                 Console.WriteLine(JsonConvert.SerializeObject(result, Formatting.Indented));
             }

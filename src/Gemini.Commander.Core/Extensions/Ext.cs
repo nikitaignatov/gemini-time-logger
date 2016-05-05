@@ -13,8 +13,9 @@ namespace Gemini.Commander.Core.Extensions
 {
     public static class Ext
     {
-        public static decimal Round(this decimal value, int decimals = 1) => Math.Round(value, 1);
-        public static double Round(this double value, int decimals = 1) => Math.Round(value, 1);
+        public static double SqrtSumSquares(this IEnumerable<double> value) => Math.Sqrt(value.Aggregate(0d, (a, b) => a + b * b));
+        public static decimal Round(this decimal value, int decimals = 1) => Math.Round(value, decimals);
+        public static double Round(this double value, int decimals = 1) => Math.Round(value, decimals);
         public static T Extract<T>(this IDictionary<string, ValueObject> args, string key, T defaultValue) => args.ContainsKey(key) && args[key]?.Value != null ? (T)Convert.ChangeType(args[key]?.Value?.ToString(), typeof(T)) : defaultValue;
         public static int ConvertTo(this string hours, string tag)
         {
