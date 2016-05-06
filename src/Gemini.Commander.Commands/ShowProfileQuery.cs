@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Countersoft.Gemini.Api;
 using Countersoft.Gemini.Commons.Dto;
 using Flagger;
 using Gemini.Commander.Commands.Flags;
-using Gemini.Commander.Commands.Rules;
 using Gemini.Commander.Core;
 using Gemini.Commander.Core.Extensions;
 using Newtonsoft.Json;
@@ -23,18 +23,11 @@ namespace Gemini.Commander.Commands
     {
         public ShowProfileQuery(ServiceManager svc) : base(svc) { }
 
-        private Dictionary<string, int> Tokenize(string data) => data
-            .Split(' ', '\r', '\n')
-            .Normalized()
-            .GroupBy(Ext.Id)
-            .ToDictionary(t => t.Key, t => t.Count());
-
-
         public override dynamic Execute(MainArgs args)
         {
-            //var items = Svc.LogsByEveryone(args)
+            // var items = Svc.LogsByEveryone(args)
             var items = JsonConvert.DeserializeObject<IEnumerable<IssueTimeTrackingDto>>(File.ReadAllText("c:\\temp\\dump_times.json"))
-                        .Where(x => x.Entity.EntryDate > DateTime.Today.AddDays(-200))
+                        .Where(x => x.Entity.EntryDate > DateTime.Today.AddDays(-300))
                         .GroupBy(x => x.Fullname)
                         .Select(x => new
                         {
@@ -43,67 +36,51 @@ namespace Gemini.Commander.Commands
                         });
 
             var documents = items
-                .Select(x => new { x.id, doc = Tokenize(x.doc) })
-                .ToList();
+                .Select(x => x.doc.ToDocument(new MetaData { User = x.id }))
+                .ToArray();
 
-            var vocab = documents
-                .SelectMany(x => x.doc.Keys)
-                .Distinct()
-                .ToList();
-
-            var tf = documents
-                .SelectMany(x => x.doc)
-                .GroupBy(x => x.Key)
-                .ToDictionary(x => x.Key, x => new
-                {
-                    tf = Math.Log(1 + x.Sum(t => t.Value)).Round(3),
-                    n = x.Sum(t => t.Value)
-                });
-
-            var df = vocab.ToDictionary(x => x, x => new
-            {
-                df = documents.Count(d => d.doc.ContainsKey(x)),
-                idf = Math.Log(documents.Count() / (double)documents.Count(d => d.doc.ContainsKey(x)))
-            });
+            var vocab = documents.ToVocabulary();
+            var df = vocab.ToDocumentFrequency(documents);
 
             var weighted = documents.Select(x => new
             {
-                x.id,
-                doc = x.doc.ToDictionary(m => m.Key, m => Math.Log(1 + m.Value) * df[m.Key].idf)
+                x.MetaData,
+                doc = x.Tokens.ToDictionary(m => m.Key, m => Math.Log(1 + m.Value) * df[m.Key].IDF)
             })
-            .Select(x => new { x.id, x.doc, sumsq = x.doc.Values.SqrtSumSquares() })
+            .Select(x => new { x.MetaData, x.doc, sumsq = x.doc.Values.SqrtSumSquares() })
             .Select(x => new
             {
-                x.id,
+                x.MetaData,
                 x.doc,
                 l2norm = x.doc.ToDictionary(d => d.Key, d => d.Value / x.sumsq)
-            });
+            }).ToList();
 
             Console.SetBufferSize(100, 30000);
 
-            Console.WriteLine(JsonConvert.SerializeObject(tf.OrderByDescending(x => x.Value.n).Take(10).Select(x => new { x.Key, entries = x.Value }), Formatting.Indented));
-            //  Console.WriteLine(JsonConvert.SerializeObject(weighted.ToList().Take(5), Formatting.Indented));
-
-            var profiles = typeof(DevOpsFlag).Assembly.ExportedTypes
-                  .Where(x => x.IsSubclassOf(typeof(ProfileFlag)))
-                  .Select(Activator.CreateInstance)
-                  .OfType<ProfileFlag>()
-                  .Select(profile => new { profile, tokens = Tokenize(profile.Profile) });
-
-            foreach (var profile in profiles)
+            foreach (var profile in Profiles())
             {
-                var query = profile.profile.Profile;
-                var tokens = Tokenize(query);
+                var query = profile.Profile;
+                var tokens = query.Tokenize();
 
                 var result = weighted
-                    .Select(x => new { profile.profile.Description, score = tokens.Sum(t => x.doc.ContainsKey(t.Key) ? x.l2norm[t.Key] : 0), x.id })
+                    .Select(x => new { profile.Description, score = tokens.Sum(t => x.doc.ContainsKey(t.Key) ? x.l2norm[t.Key] : 0), x.MetaData })
                     .OrderByDescending(x => x.score)
                     .GroupBy(x => x.Description)
-                    .ToDictionary(x => x.Key, x => x.Select(m => new { m.id, score = m.score.Round(3) }));
+                    .ToDictionary(x => x.Key, x => x.Select(m => new { m.MetaData.User, score = m.score.Round(3) }));
 
                 Console.WriteLine(JsonConvert.SerializeObject(result, Formatting.Indented));
             }
+            Console.WriteLine(string.Join(",", weighted.Select(x => x.MetaData.User)));
+            foreach (var term in vocab.GroupBy(x=>x).Select(x=>x.Key))
+            {
+                Console.WriteLine(term + "," + string.Join(",", weighted.Select(x => x.doc.ContainsKey(term) ? x.doc[term] : 0).Select(x => x.Round(3).ToString(CultureInfo.InvariantCulture))));
+            }
             return null;
         }
+
+        public static IEnumerable<ProfileFlag> Profiles() => typeof(DevOpsFlag).Assembly.ExportedTypes
+                  .Where(x => x.IsSubclassOf(typeof(ProfileFlag)))
+                  .Select(Activator.CreateInstance)
+                  .OfType<ProfileFlag>();
     }
 }

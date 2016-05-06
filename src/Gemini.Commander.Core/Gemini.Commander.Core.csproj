@@ -63,6 +63,7 @@
     <Compile Include="CommandAttribute.cs" />
     <Compile Include="Extensions\Ext.cs" />
     <Compile Include="Extensions\IssueTimeTrackingExtensions.cs" />
+    <Compile Include="Extensions\TextProcessing.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="MainArgs.cs" />
     <Compile Include="Option.cs" />
