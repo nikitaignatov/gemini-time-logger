@@ -70,11 +70,6 @@ namespace Gemini.Commander.Commands
 
                 Console.WriteLine(JsonConvert.SerializeObject(result, Formatting.Indented));
             }
-            Console.WriteLine(string.Join(",", weighted.Select(x => x.MetaData.User)));
-            foreach (var term in vocab.GroupBy(x=>x).Select(x=>x.Key))
-            {
-                Console.WriteLine(term + "," + string.Join(",", weighted.Select(x => x.doc.ContainsKey(term) ? x.doc[term] : 0).Select(x => x.Round(3).ToString(CultureInfo.InvariantCulture))));
-            }
             return null;
         }
 

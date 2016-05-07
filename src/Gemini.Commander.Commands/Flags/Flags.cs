@@ -13,7 +13,7 @@ namespace Gemini.Commander.Commands.Flags
         public override string Description { get; } = "Hotfix";
         public override FlagCategory Category { get; } = FlagCategory.Danger;
         public override int Points { get; } = 10;
-        public override string Profile { get; } = "hot hotfix fix release deploy";
+        public override string Profile { get; } = "hot hotfix fix release deploy deployment released  ";
     }
 
     public class QuickfixFlag : ProfileFlag
@@ -29,7 +29,7 @@ namespace Gemini.Commander.Commands.Flags
         public override string Description { get; } = "Manager";
         public override FlagCategory Category { get; } = FlagCategory.Info;
         public override int Points { get; } = 10;
-        public override string Profile { get; } = "misq meeting talk discuss plan requirment";
+        public override string Profile { get; } = "misq meeting talk discuss plan requirments requirment follow";
     }
 
     public class TesterFlag : ProfileFlag
@@ -45,7 +45,7 @@ namespace Gemini.Commander.Commands.Flags
         public override string Description { get; } = "Automated tests";
         public override FlagCategory Category { get; } = FlagCategory.Info;
         public override int Points { get; } = 10;
-        public override string Profile { get; } = "test tests cucumber spec specflow nunit junit unit tdd run execute";
+        public override string Profile { get; } = "test tests case scenario cucumber spec specflow nunit junit unit tdd run execute";
     }
 
     public class DevOpsFlag : ProfileFlag
@@ -53,7 +53,7 @@ namespace Gemini.Commander.Commands.Flags
         public override string Description { get; } = "DevOps";
         public override FlagCategory Category { get; } = FlagCategory.Info;
         public override int Points { get; } = 10;
-        public override string Profile { get; } = "deployed released implemented merge merged review investigate logs";
+        public override string Profile { get; } = "deployed released implemented merge merged review investigate logs ssh bash cmd powershell";
     }
 
     public class DeveloperFlag : ProfileFlag
@@ -69,10 +69,10 @@ namespace Gemini.Commander.Commands.Flags
         public override string Description { get; } = "Programmer";
         public override FlagCategory Category { get; } = FlagCategory.Info;
         public override int Points { get; } = 10;
-        public override string Profile { get; } = "commit implement build script function object reference db jenkins";
+        public override string Profile { get; } = "commit implement build script function object reference db jenkins signing encryption crypto keys connection configuration";
     }
 
-    public class Flags : Flag
+    public class WorkLifeBalanceFlag : Flag
     {
         public override string Description { get; } = "Work life balance";
         public override FlagCategory Category { get; } = FlagCategory.Info;
