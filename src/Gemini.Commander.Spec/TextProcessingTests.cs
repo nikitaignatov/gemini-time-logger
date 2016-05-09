@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Gemini.Commander.Core;
@@ -33,6 +34,33 @@ namespace Gemini.Commander.Spec
             input.Select(x => x.ToDocument(new MetaData { User = "user" }))
                 .ToVocabulary()
                 .OrderBy(x => x)
+                .ShouldBeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_generate_term_frequency()
+        {
+            var input = new[]
+            {
+                "testing tests works testing" ,
+                "added tests to project",
+                "tested scenarios"
+            };
+
+            var expected = new Dictionary<string, TermStat>
+            {
+                {"testing", new TermStat {TFW = 1.099,TF = 2} },
+                {"tests",   new TermStat {TFW = 1.099,TF = 2}},
+                {"works",   new TermStat {TFW = 0.693,TF = 1}},
+                {"added",   new TermStat {TFW = 0.693,TF = 1}},
+                {"project", new TermStat {TFW = 0.693,TF = 1}},
+                {"tested",  new TermStat {TFW = 0.693,TF = 1}},
+                {"scenarios",new TermStat {TFW = 0.693,TF = 1}},
+
+            };
+
+            input.Select(x => x.ToDocument(new MetaData { User = "user" }))
+                .ToTermFrequency()
                 .ShouldBeEquivalentTo(expected);
         }
     }
