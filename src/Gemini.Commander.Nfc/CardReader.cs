@@ -4,18 +4,18 @@ using PCSC;
 
 namespace Gemini.Commander.Nfc
 {
-    public class CardReader<TIdentity> : IDisposable, ICardReader<TIdentity>
+    public class CardReader : IDisposable, ICardReader
     {
-        public Func<CardTransaction<TIdentity>, CardTransaction<TIdentity>> CreateLog { get; set; }
-        public Action<CardTransaction<TIdentity>> UpdateLog { get; set; }
-        private CardTransaction<TIdentity> transaction = new CardTransaction<TIdentity> { CardId = "NONE" };
+        public Func<CardTransaction, CardTransaction> CreateLog { get; set; }
+        public Action<CardTransaction> UpdateLog { get; set; }
+        private CardTransaction transaction = new CardTransaction { CardId = "NONE" };
 
         public void InsertCard(ISCardContext context, string reader)
         {
             lock (transaction)
             {
                 if (transaction != null && (DateTime.Now - transaction.Started).TotalSeconds < 30) return;
-                transaction = transaction ?? new CardTransaction<TIdentity>();
+                transaction = transaction ?? new CardTransaction();
                 transaction.Started = DateTime.Now;
                 transaction.TransactionId = Guid.NewGuid();
 
@@ -35,7 +35,7 @@ namespace Gemini.Commander.Nfc
                 }
                 finally
                 {
-                    transaction = new CardTransaction<TIdentity>();
+                    transaction = new CardTransaction();
                 }
             }
         }
