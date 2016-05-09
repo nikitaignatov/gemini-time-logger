@@ -6,9 +6,9 @@ namespace Gemini.Commander.Nfc
 {
     public static class CardReaderExtensions
     {
-        public static string ReadCardUid(this ISCardContext context, string reader)
+        public static string ReadCardUid(this string reader, Func<ISCardReader> factory)
         {
-            using (var rfidReader = new SCardReader(context))
+            using (var rfidReader = factory())
             {
                 var sc = rfidReader.Connect(reader, SCardShareMode.Shared, SCardProtocol.Any);
 
@@ -16,7 +16,6 @@ namespace Gemini.Commander.Nfc
 
                 var apdu = CreateApdu(rfidReader);
                 sc = rfidReader.BeginTransaction();
-
                 sc.Validate("Could not begin transaction.");
 
                 var receivePci = new SCardPCI();

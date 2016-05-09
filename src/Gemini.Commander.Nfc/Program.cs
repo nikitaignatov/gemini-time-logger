@@ -15,7 +15,7 @@ namespace Gemini.Commander.Nfc
             var map = LoadCardMap();
             var history = LoadHistory();
 
-            var reader = new CardReader<int>();
+            var reader = new CardReader();
 
             reader.CreateLog = x =>
             {
@@ -53,16 +53,16 @@ namespace Gemini.Commander.Nfc
             return JsonConvert.DeserializeObject<Dictionary<string, string>>(text);
         }
 
-        private static List<CardTransaction<int>> LoadHistory()
+        private static List<CardTransaction> LoadHistory()
         {
             var path = GetFilePath("nfc.history.path");
 
             var text = File.ReadAllText(path);
             Console.WriteLine(text);
-            return JsonConvert.DeserializeObject<List<CardTransaction<int>>>(text);
+            return JsonConvert.DeserializeObject<List<CardTransaction>>(text);
         }
 
-        private static void StoreHistory(IEnumerable<CardTransaction<int>> data)
+        private static void StoreHistory(IEnumerable<CardTransaction> data)
         {
             var path = GetFilePath("nfc.history.path");
             var text = JsonConvert.SerializeObject(data, Formatting.Indented);

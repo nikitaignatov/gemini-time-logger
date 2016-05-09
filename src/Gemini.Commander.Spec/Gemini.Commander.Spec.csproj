@@ -67,6 +67,9 @@
       <HintPath>..\packages\NUnit.3.2.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="pcsc-sharp">
+      <HintPath>..\lib\pcsc-sharp.dll</HintPath>
+    </Reference>
     <Reference Include="SimpleInjector, Version=3.1.4.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
       <HintPath>..\packages\SimpleInjector.3.1.4\lib\net45\SimpleInjector.dll</HintPath>
       <Private>True</Private>
@@ -90,9 +93,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandSelectorTests.cs" />
-    <Compile Include="TextProcessingTests.cs" />
-    <Compile Include="OptionParserTests.cs" />
+    <Compile Include="Tests\CommandSelectorTests.cs" />
+    <Compile Include="Tests\OptionParserTests.cs" />
+    <Compile Include="Tests\CardReaderTests.cs" />
+    <Compile Include="Tests\TextProcessingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Steps\TimeReportStepDefinition.cs" />
     <Compile Include="TimeReport.feature.cs">
@@ -118,6 +122,10 @@
       <Project>{e03a4a02-d525-4ba7-a847-90eea6d7d51c}</Project>
       <Name>Gemini.Commander.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Gemini.Commander.Nfc\Gemini.Commander.Nfc.csproj">
+      <Project>{67158059-3cb5-4b4b-b6d0-502adb104bf3}</Project>
+      <Name>Gemini.Commander.Nfc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Gemini.Commander\Gemini.Commander.Terminal.csproj">
       <Project>{321fc229-cc5b-474c-ac88-0b478bc4d0dc}</Project>
       <Name>Gemini.Commander.Terminal</Name>
@@ -129,6 +137,7 @@
   <ItemGroup>
     <Content Include="gemini_settings.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

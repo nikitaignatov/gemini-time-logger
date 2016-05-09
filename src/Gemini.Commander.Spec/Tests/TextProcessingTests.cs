@@ -1,12 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Gemini.Commander.Core;
 using Gemini.Commander.Core.Extensions;
 using NUnit.Framework;
 
-namespace Gemini.Commander.Spec
+namespace Gemini.Commander.Spec.Tests
 {
     [TestFixture]
     public class TextProcessingTests

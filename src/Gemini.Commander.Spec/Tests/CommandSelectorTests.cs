@@ -5,7 +5,7 @@ using Gemini.Commander.Commands;
 using Gemini.Commander.Core;
 using NUnit.Framework;
 
-namespace Gemini.Commander.Spec
+namespace Gemini.Commander.Spec.Tests
 {
     [TestFixture]
     class CommandSelectorTests
