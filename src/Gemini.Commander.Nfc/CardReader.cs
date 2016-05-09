@@ -4,27 +4,18 @@ using PCSC;
 
 namespace Gemini.Commander.Nfc
 {
-    public class CardReader : IDisposable, ICardReader<int>
+    public class CardReader<TIdentity> : IDisposable, ICardReader<TIdentity>
     {
-        public Func<CardTransaction<int>, CardTransaction<int>> CreateLog { get; set; }
-        public Action<CardTransaction<int>> UpdateLog { get; set; }
+        public Func<CardTransaction<TIdentity>, CardTransaction<TIdentity>> CreateLog { get; set; }
+        public Action<CardTransaction<TIdentity>> UpdateLog { get; set; }
+        private CardTransaction<TIdentity> transaction = new CardTransaction<TIdentity> { CardId = "NONE" };
 
-        private readonly IContextFactory _contextFactory = ContextFactory.Instance;
-        private bool go = true;
-        private CardTransaction<int> transaction = new CardTransaction<int> { CardId = "NONE" };
-
-        private void AttachEvents(ISCardMonitor monitor, ISCardContext context, string reader)
-        {
-            monitor.CardInserted += (sender, args) => InsertCard(context, reader);
-            monitor.CardRemoved += (sender, args) => RemoveCard();
-        }
-
-        private void InsertCard(ISCardContext context, string reader)
+        public void InsertCard(ISCardContext context, string reader)
         {
             lock (transaction)
             {
                 if (transaction != null && (DateTime.Now - transaction.Started).TotalSeconds < 30) return;
-                transaction = transaction ?? new CardTransaction<int>();
+                transaction = transaction ?? new CardTransaction<TIdentity>();
                 transaction.Started = DateTime.Now;
                 transaction.TransactionId = Guid.NewGuid();
 
@@ -33,22 +24,31 @@ namespace Gemini.Commander.Nfc
             }
         }
 
-        private void RemoveCard()
+        public void RemoveCard()
         {
             lock (transaction)
             {
                 try
                 {
+                    transaction.Ended = DateTime.Now;
                     UpdateLog?.Invoke(transaction);
                 }
                 finally
                 {
-                    transaction = new CardTransaction<int>();
+                    transaction = new CardTransaction<TIdentity>();
                 }
             }
         }
 
+        private bool go = true;
+        private readonly IContextFactory _contextFactory = ContextFactory.Instance;
         public void Dispose() => go = false;
+
+        private void AttachEvents(ISCardMonitor monitor, ISCardContext context, string reader)
+        {
+            monitor.CardInserted += (sender, args) => InsertCard(context, reader);
+            monitor.CardRemoved += (sender, args) => RemoveCard();
+        }
 
         public void Initialize()
         {

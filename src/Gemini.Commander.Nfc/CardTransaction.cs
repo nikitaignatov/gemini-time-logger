@@ -9,6 +9,8 @@ namespace Gemini.Commander.Nfc
         public DateTime Started { get; set; }
         public DateTime Ended { get; set; }
         public Guid TransactionId { get; set; }
+        public string Message { get; set; }
         public TIdentity Id { get; set; }
+        public TimeSpan Duration => Ended - Started;
     }
 }
