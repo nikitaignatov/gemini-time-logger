@@ -1,7 +1,6 @@
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using FluentAssertions;
-using Gemini.Commander.Core.Extensions;
 using Gemini.Commander.Nfc;
 using NSubstitute;
 using NUnit.Framework;
@@ -60,6 +59,35 @@ namespace Gemini.Commander.Spec.Tests
             svc.RemoveCard();
             // assert
             svc.ReceivedWithAnyArgs(1).UpdateLog(Arg.Is<CardTransaction>(x => x.CardId == "NONE"));
+        }
+
+        [Test]
+        public void invalid_sc_should_throw_exception()
+        {
+            // arrage 
+            var expected = "Some message";
+            var type = typeof(SCardError);
+            var errors = Enum.GetNames(type)
+                   .Select(x => (SCardError)Enum.Parse(type, x))
+                   .Where(x => x != SCardError.Success);
+
+            // act 
+            foreach (var error in errors)
+            {
+                Action result = () => error.Validate(expected);
+                // assert
+                result.ShouldThrow<Exception>().WithMessage(expected);
+            }
+        }
+
+        [Test]
+        public void success_should_not_throw()
+        {
+            // arrage 
+            // act 
+            Action result = () => SCardError.Success.Validate("");
+            // assert
+            result.ShouldNotThrow();
         }
     }
 }

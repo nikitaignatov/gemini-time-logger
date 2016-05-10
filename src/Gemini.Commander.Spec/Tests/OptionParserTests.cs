@@ -26,7 +26,7 @@ namespace Gemini.Commander.Spec.Tests
         [TestCase("log 1h 10 testing")]
         public void should_parse_when_option_default(string text)
         {
-            new MainArgs(text.Split(' ')).Options.When.Date.ShouldBeEquivalentTo(DateTime.Today.ToUniversalTime().Date);
+            new MainArgs(text.Split(' ')).Options.When.Date.ShouldBeEquivalentTo(DateTime.Today.Date);
         }
 
         [TestCase("show hours all --working-hours 10", 10)]

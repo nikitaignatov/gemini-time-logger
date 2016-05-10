@@ -39,7 +39,7 @@ namespace Gemini.Commander.Nfc
             }
         }
 
-        private static void Validate(this SCardError sc, string message)
+        public static void Validate(this SCardError sc, string message)
         {
             if (sc != SCardError.Success) throw new Exception(message);
         }
