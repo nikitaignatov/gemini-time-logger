@@ -21,9 +21,11 @@ namespace Gemini.Commander.Nfc
             {
                 x.Id = new Random().Next();
                 var dialog = new TimeLogMessageForm();
-                dialog.Message = message =>
+                dialog.Message = (message,ticket, type) =>
                 {
                     x.Message = message;
+                    x.ContacType = type;
+                    x.Id = Convert.ToInt32(ticket);
                     Console.WriteLine($"Update:{message}");
                 };
 
