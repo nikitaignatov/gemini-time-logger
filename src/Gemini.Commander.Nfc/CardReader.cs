@@ -9,7 +9,7 @@ namespace Gemini.Commander.Nfc
         public Func<CardTransaction, CardTransaction> CreateLog { get; set; }
         public Action<CardTransaction> UpdateLog { get; set; }
         public Func<ISCardReader> ReaderFactory { get; set; }
-        private CardTransaction transaction = new CardTransaction { CardId = "NONE" };
+        private CardTransaction transaction = new CardTransaction { Card = "NONE" };
 
         public void InsertCard(ISCardContext context, string reader)
         {
@@ -18,7 +18,7 @@ namespace Gemini.Commander.Nfc
                 if (transaction != null && (DateTime.Now - transaction.Started).TotalSeconds < 30) return;
                 CreateDefaultTransaction();
 
-                transaction.CardId = reader.ReadCardUid(ReaderFactory ?? (() => new SCardReader(context)));
+                transaction.Card = reader.ReadCardUid(ReaderFactory ?? (() => new SCardReader(context)));
                 transaction = CreateLog(transaction);
             }
         }

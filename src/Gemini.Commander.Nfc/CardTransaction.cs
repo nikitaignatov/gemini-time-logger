@@ -4,22 +4,14 @@ namespace Gemini.Commander.Nfc
 {
     public class CardTransaction
     {
-        public string CardId { get; set; }
+        /// <summary>
+        /// UID of the card
+        /// </summary>
+        public string Card { get; set; }
         public DateTime Started { get; set; }
-        public DateTime Ended { get; set; }
+        public DateTime? Ended { get; set; }
         public Guid TransactionId { get; set; }
-        public string Message { get; set; }
-        public int Id { get; set; }
-        public ContactType ContacType { get; set; }
-        public TimeSpan Duration => Ended - Started;
-    }
-
-    public enum ContactType
-    {
-        Random = 0,
-        Question = 1,
-        Consulting = 2,
-        Discussion = 3,
-        NonWorkRelated = 4,
+        public TimeSpan Duration => Ended.HasValue ? Ended.Value - Started : default(TimeSpan);
+        public bool IsEnded => Ended.HasValue;
     }
 }

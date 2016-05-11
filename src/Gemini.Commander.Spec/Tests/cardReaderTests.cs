@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Windows.Forms;
 using FluentAssertions;
 using Gemini.Commander.Nfc;
 using NSubstitute;
@@ -48,7 +49,7 @@ namespace Gemini.Commander.Spec.Tests
             svc.InsertCard(context, "reader");
             svc.RemoveCard();
             // assert
-            svc.ReceivedWithAnyArgs(1).UpdateLog(Arg.Is<CardTransaction>(x => x.CardId != "NONE"));
+            svc.ReceivedWithAnyArgs(1).UpdateLog(Arg.Is<CardTransaction>(x => x.Card != "NONE"));
         }
 
         [Test]
@@ -58,7 +59,7 @@ namespace Gemini.Commander.Spec.Tests
             // act 
             svc.RemoveCard();
             // assert
-            svc.ReceivedWithAnyArgs(1).UpdateLog(Arg.Is<CardTransaction>(x => x.CardId == "NONE"));
+            svc.ReceivedWithAnyArgs(1).UpdateLog(Arg.Is<CardTransaction>(x => x.Card == "NONE"));
         }
 
         [Test]

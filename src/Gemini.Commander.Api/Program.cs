@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Net.Http;
-using System.Web.Http;
-using Countersoft.Gemini.Api;
-using Gemini.Commander.Commands;
-using Gemini.Commander.Core;
 using Microsoft.Owin.Hosting;
 
 namespace Gemini.Commander.Api
@@ -23,31 +17,8 @@ namespace Gemini.Commander.Api
 
                 Console.WriteLine(response);
                 Console.WriteLine(response.Content.ReadAsStringAsync().Result);
-                Console.ReadLine();
+                new TimeTracker().Run();
             }
-        }
-    }
-
-    public class CommandsController : ApiController
-    {
-        [Route("api/show/words")]
-        [HttpGet]
-        public dynamic Words()
-        {
-            return new ShowProfileQuery(LoadService()).Execute(new MainArgs(new string[] { "show", "words", "everyone", "--take=10" , "--stemmed" }));
-        }
-
-        [Route("api/show/hours/{user}")]
-        [HttpPost]
-        public IHttpActionResult Hours(string user)
-        {
-            return Ok();
-        }
-
-        private static ServiceManager LoadService()
-        {
-            var settings = ConfigurationManager.AppSettings;
-            return new ServiceManager(settings["endpoint"], settings["username"], "", settings["apikey"]);
         }
     }
 }
