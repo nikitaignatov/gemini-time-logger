@@ -16,18 +16,19 @@ namespace Gemini.Commander.Nfc
             lock (transaction)
             {
                 if (transaction != null && (DateTime.Now - transaction.Started).TotalSeconds < 30) return;
-                CreateDefaultTransaction();
+                transaction = transaction ?? CreateDefaultTransaction();
 
                 transaction.Card = reader.ReadCardUid(ReaderFactory ?? (() => new SCardReader(context)));
                 transaction = CreateLog(transaction);
             }
         }
 
-        private void CreateDefaultTransaction()
+        public static CardTransaction CreateDefaultTransaction()
         {
-            transaction = transaction ?? new CardTransaction();
+            var transaction = new CardTransaction();
             transaction.Started = DateTime.Now;
             transaction.TransactionId = Guid.NewGuid();
+            return transaction;
         }
 
         public void RemoveCard()

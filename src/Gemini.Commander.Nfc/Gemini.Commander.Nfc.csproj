@@ -56,6 +56,7 @@
     <Compile Include="CardReaderExtensions.cs" />
     <Compile Include="CardTransaction.cs" />
     <Compile Include="ICardReader.cs" />
+    <Compile Include="MockReader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

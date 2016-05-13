@@ -14,12 +14,17 @@ namespace Gemini.Commander.Api
     {
         public static ConcurrentDictionary<string, string> users = new ConcurrentDictionary<string, string>();
         public static Dictionary<Guid, TrackerSession> data = new Dictionary<Guid, TrackerSession>();
+        private readonly ICardReader reader;
+
+        public TimeTracker(ICardReader reader)
+        {
+            this.reader = reader;
+        }
 
         public void Run()
         {
             data = LoadHistory();
             users = LoadCardMap();
-            var reader = new CardReader();
             reader.CreateLog = (x) =>
             {
                 var session = new TrackerSession
@@ -70,13 +75,13 @@ namespace Gemini.Commander.Api
 
         private static ConcurrentDictionary<string, string> LoadCardMap() => Load<ConcurrentDictionary<string, string>>("nfc.conf.path");
         private static Dictionary<Guid, TrackerSession> LoadHistory() => Load<Dictionary<Guid, TrackerSession>>("nfc.history.path");
-        private static T Load<T>(string key) => JsonConvert.DeserializeObject<T>(File.ReadAllText(GetFilePath(key)));
+        private static T Load<T>(string key) => JsonConvert.DeserializeObject<T>(File.ReadAllText(GetFilePathFromConfig(key)));
 
         public static void StoreHistory(Dictionary<Guid, TrackerSession> data) => Store(data, "nfc.history.path");
         public static void StoreCardMap(ConcurrentDictionary<string, string> data) => Store(data, "nfc.conf.path");
-        public static void Store<T>(T input, string key) => File.WriteAllText(GetFilePath(key), JsonConvert.SerializeObject(input, Formatting.Indented));
+        public static void Store<T>(T input, string key) => File.WriteAllText(GetFilePathFromConfig(key), JsonConvert.SerializeObject(input, Formatting.Indented));
 
-        private static string GetFilePath(string key)
+        private static string GetFilePathFromConfig(string key)
         {
             var path = ConfigurationManager.AppSettings[key];
             if (string.IsNullOrWhiteSpace(path)) throw new Exception($"path [{path}] is not configured.");
