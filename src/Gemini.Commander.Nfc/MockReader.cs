@@ -13,7 +13,7 @@ namespace Gemini.Commander.Nfc
 
         public void Initialize()
         {
-            CardTransaction tx = new CardTransaction { Card = "NONE" };
+            var tx = new CardTransaction { Card = "NONE" };
             var swap = true;
             while (true)
             {
@@ -28,6 +28,7 @@ namespace Gemini.Commander.Nfc
                 {
                     Console.WriteLine("Press enter when card should be removed.");
                     Console.ReadLine();
+                    tx.Ended = DateTime.Now;
                     UpdateLog(tx);
                 }
                 swap = !swap;

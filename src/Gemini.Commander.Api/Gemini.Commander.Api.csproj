@@ -148,6 +148,7 @@
   <ItemGroup>
     <Compile Include="AttributeRoutingConfig.cs" />
     <Compile Include="CommandsController.cs" />
+    <Compile Include="DataStore.cs" />
     <Compile Include="TrackerSession.cs" />
     <Compile Include="TimeTracker.cs" />
     <Compile Include="TimeType.cs" />
