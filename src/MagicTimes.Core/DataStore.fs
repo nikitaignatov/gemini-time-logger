@@ -27,6 +27,7 @@ module DataStore =
     open System.Collections.Generic
     open Serializer
     open System
+    open System.Linq
     
     type T = 
         { Data : Dictionary<Guid, TrackerSession>
@@ -53,3 +54,21 @@ module DataStore =
             serializeFile path data
             sprintf "Data stored in %s." path
         | _ -> "Failed to store data."
+    
+    let convert (input : Option<T>) = 
+        let inline (=>) a b = a, box b
+        match input with
+        | Some store -> 
+            let data = store.Data.OrderByDescending(fun v -> v.Value.Transaction.Started)
+            printfn "%A" data
+            dict [ "users" => store.UserStore.Select(fun x -> x.Value).ToArray()
+                   "new_sessions" => data.Where(fun x -> not x.Value.IsValid).ToArray()
+                   "ready_to_submit" => data.Where(fun x -> x.Value.IsValid && not x.Value.IsSubmitted).ToArray()
+                   "complete" => data.Where(fun x -> x.Value.IsSubmitted).ToArray()
+                   "total_minutes" => data.Where(fun x -> x.Value.Transaction.IsEnded).Sum(fun x -> x.Value.Transaction.Duration.TotalMinutes)
+                   "total_sessions" => data.Count()
+                   "total_questions" => data.Count(fun x -> x.Value.Type = Model.TimeType.Question)
+                   "settings" => store.Settings
+                   "DataStore" => store ]
+            |> Some
+        | _ -> None

@@ -46,11 +46,12 @@ module HubModule =
         { ``type`` = name.ToUpper()
           data = Option.toArray data }
     
-    let event name (data:Option<'a>) (x : Hub) = wrap name data |> x.Clients.All?event
-
+    let event name (data : Option<'a>) (x : Hub) = wrap name data |> x.Clients.All?event
+    
     let sendData = 
         "nfc.datastore.path"
         |> DataStore.Load
+        |> DataStore.convert
         |> event "RECIEVE_UPDATE"
     
     let execute (x : Hub) command = 
