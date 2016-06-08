@@ -41,6 +41,7 @@ module Model =
           SessionId : Guid
           Name : string
           Transaction : CardTransaction
+          Transactions : CardTransaction list
           Attributes : Dictionary<string, Object>
           Ticket : string
           Type : TimeType
