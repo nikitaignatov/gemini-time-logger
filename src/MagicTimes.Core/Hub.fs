@@ -46,6 +46,20 @@ module HubModule =
             |> x.Clients.All?event
         command
     
+    let printConnection (x : Hub) command = printfn "%s: %s" command x.Context.ConnectionId
+    
     type CommandHub() as this = 
         inherit Hub()
         member this.Command(data : Command.T) = execute this data
+        
+        override this.OnConnected() = 
+            printConnection this "CONNECTED"
+            base.OnConnected()
+        
+        override this.OnDisconnected stop = 
+            printConnection this "DISCONNECTED"
+            base.OnDisconnected stop
+        
+        override this.OnReconnected() = 
+            printConnection this "RECONNECTED"
+            base.OnReconnected()
