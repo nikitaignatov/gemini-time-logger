@@ -38,15 +38,28 @@ module HubModule =
     open Microsoft.AspNet.SignalR.Hubs
     open MagicTimes.Core
     
+    type Event<'a> = 
+        { ``type`` : string
+          data : 'a }
+    
+    let wrap (name : string) (data : Option<'a>) = 
+        { ``type`` = name.ToUpper()
+          data = Option.toArray data }
+    
+    let event name (data:Option<'a>) (x : Hub) = wrap name data |> x.Clients.All?event
+
+    let sendData = 
+        "nfc.datastore.path"
+        |> DataStore.Load
+        |> event "RECIEVE_UPDATE"
+    
     let execute (x : Hub) command = 
         match command with
-        | Command.LoadData -> 
-            DataStore.Load "nfc.datastore.path"
-            |> Option.toArray
-            |> x.Clients.All?event
+        | Command.LoadData -> sendData x
         command
     
     let printConnection (x : Hub) command = printfn "%s: %s" command x.Context.ConnectionId
+    let onConnect (x : Hub) = sendData x
     
     type CommandHub() as this = 
         inherit Hub()
@@ -54,6 +67,7 @@ module HubModule =
         
         override this.OnConnected() = 
             printConnection this "CONNECTED"
+            onConnect this
             base.OnConnected()
         
         override this.OnDisconnected stop = 
@@ -62,4 +76,5 @@ module HubModule =
         
         override this.OnReconnected() = 
             printConnection this "RECONNECTED"
+            onConnect this
             base.OnReconnected()
