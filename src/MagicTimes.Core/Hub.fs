@@ -3,64 +3,42 @@
 open Countersoft.Gemini.Api
 open Countersoft.Gemini.Commons.Entity
 open Countersoft.Gemini.Commons.Dto
-open System
-
-module Session = 
-    type SessionId = int
-    
-    type AddIssueId = 
-        { id : SessionId
-          issueId : int }
-    
-    type AddComment = 
-        { id : SessionId
-          comment : string }
-
-module Settings = 
-    type Settings = 
-        { username : string
-          apiKey : string }
-    
-    type ChangeSettings = 
-        { Settings : Settings }
-
-module Command = 
-    type T = 
-        | ChangeSettings of Settings.ChangeSettings
-        | AddIssueId of Session.AddIssueId
-        | AddComment of Session.AddComment
-        | ResetSettings
-        | LoadData
 
 module HubModule = 
     open FSharp.Interop.Dynamic
     open Microsoft.AspNet.SignalR
     open Microsoft.AspNet.SignalR.Hubs
     open MagicTimes.Core
+    open MagicTimes.Events
+    open MagicTimes.Events.Event
+    open MagicTimes.Events.Notification
+    open MagicTimes.Events.Prompt
     
-    type Event<'a> = 
-        { ``type`` : string
-          data : 'a }
+    let storePath = "nfc.datastore.path"
+    let load() = storePath |> DataStore.load
+    let save() = storePath |> DataStore.store
     
-    let wrap (name : string) (data : Option<'a>) = 
-        { ``type`` = name.ToUpper()
-          data = Option.toArray data }
-    
-    let event name (data : Option<'a>) (x : Hub) = wrap name data |> x.Clients.All?event
-    
-    let sendData = 
-        "nfc.datastore.path"
-        |> DataStore.Load
+    let sendData() = 
+        load()
         |> DataStore.convert
-        |> event "RECIEVE_UPDATE"
+        |> create Types.RECIEVE_UPDATE
+    
+    let deleteSession (id) = 
+        let p = load()
+        let result = p.Value.Data.Remove(id)
+        if result then 
+            save () p |> printfn "DataStore: %A"
+            success "Session is deleted" (sprintf "Session %A was deleted and data has been saved" id)
+        else error "Session was not deleted" "Failed to delete session"
     
     let execute (x : Hub) command = 
         match command with
-        | Command.LoadData -> sendData x
+        | Command.LoadData -> sendData () x
+        | Command.DeleteSession data -> deleteSession data.id x
         command
     
     let printConnection (x : Hub) command = printfn "%s: %s" command x.Context.ConnectionId
-    let onConnect (x : Hub) = sendData x
+    let onConnect (x : Hub) = sendData () x
     
     type CommandHub() as this = 
         inherit Hub()
@@ -69,6 +47,8 @@ module HubModule =
         override this.OnConnected() = 
             printConnection this "CONNECTED"
             onConnect this
+            error "Poopidoo was not deleted" "Failed to delete session" this
+            input "Who is this?" "New card not seen before" this
             base.OnConnected()
         
         override this.OnDisconnected stop = 

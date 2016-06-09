@@ -43,19 +43,19 @@ module DataStore =
           Settings = defaultSettings
           WorkingHours = List.empty }
     
-    let Load(key : string) = 
+    let load (key : string) = 
         match setting key with
         | Some path -> deserializeFile<T> path
         | None -> None
     
-    let Store (key : string) (input : Option<T>) = 
+    let store (key : string) (input : Option<T>) = 
         match setting key, input with
         | Some path, Some data -> 
             serializeFile path data
             sprintf "Data stored in %s." path
         | _ -> "Failed to store data."
     
-    let convert (input : Option<T>) = 
+    let convert<'a> (input : Option<T>) = 
         let inline (=>) a b = a, box b
         match input with
         | Some store -> 
