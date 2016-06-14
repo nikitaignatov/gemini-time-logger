@@ -58,6 +58,7 @@
     <Compile Include="Events.fs" />
     <Compile Include="Commands.fs" />
     <Compile Include="Hub.fs" />
+    <Compile Include="CardReader.fs" />
     <Compile Include="Program.fs" />
     <Content Include="App.config" />
   </ItemGroup>
