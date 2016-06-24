@@ -138,10 +138,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Gemini.Commander.Api\Gemini.Commander.Api.csproj">
-      <Project>{bf53fc64-828c-458d-920d-5b99b9377583}</Project>
-      <Name>Gemini.Commander.Api</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Gemini.Commander.Commands\Gemini.Commander.Commands.csproj">
       <Project>{a4648e51-f2b5-4060-a38c-fc4a24ad4ddd}</Project>
       <Name>Gemini.Commander.Commands</Name>

@@ -28,9 +28,18 @@ namespace Gemini.Commander.Core.Extensions
 
     public class MetaData
     {
+        public MetaData()
+        {
+            Attributes = new Dictionary<string, string>();
+            Metrics = new Dictionary<string, int>();
+            MetricsNormalized = new Dictionary<string, double>();
+        }
         public string User { get; set; }
         public string Project { get; set; }
         public string Ticket { get; set; }
+        public Dictionary<string, string> Attributes { get; set; }
+        public Dictionary<string, int> Metrics { get; set; }
+        public Dictionary<string, double> MetricsNormalized { get; set; }
     }
 
     public static class TextProcessing

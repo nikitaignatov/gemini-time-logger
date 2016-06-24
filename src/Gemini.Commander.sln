@@ -11,10 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gemini.Commander.Commands",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gemini.Commander.Core", "Gemini.Commander.Core\Gemini.Commander.Core.csproj", "{E03A4A02-D525-4BA7-A847-90EEA6D7D51C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gemini.Commander.Api", "Gemini.Commander.Api\Gemini.Commander.Api.csproj", "{BF53FC64-828C-458D-920D-5B99B9377583}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gemini.Commander.Nfc", "Gemini.Commander.Nfc\Gemini.Commander.Nfc.csproj", "{67158059-3CB5-4B4B-B6D0-502ADB104BF3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,14 +33,6 @@ Global
 		{E03A4A02-D525-4BA7-A847-90EEA6D7D51C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E03A4A02-D525-4BA7-A847-90EEA6D7D51C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E03A4A02-D525-4BA7-A847-90EEA6D7D51C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF53FC64-828C-458D-920D-5B99B9377583}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF53FC64-828C-458D-920D-5B99B9377583}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF53FC64-828C-458D-920D-5B99B9377583}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF53FC64-828C-458D-920D-5B99B9377583}.Release|Any CPU.Build.0 = Release|Any CPU
-		{67158059-3CB5-4B4B-B6D0-502ADB104BF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{67158059-3CB5-4B4B-B6D0-502ADB104BF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{67158059-3CB5-4B4B-B6D0-502ADB104BF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{67158059-3CB5-4B4B-B6D0-502ADB104BF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
